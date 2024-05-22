@@ -19,7 +19,11 @@ class UpcomingSection extends StatelessWidget {
           padding: EdgeInsets.only(bottom: 15.0, left: 5.0),
           child: Text(
             'Upcoming',
-            style: TextStyle(color: Colors.white, fontSize: 20),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         FutureBuilder<List<Movie>>(

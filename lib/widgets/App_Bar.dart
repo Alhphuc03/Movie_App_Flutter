@@ -11,7 +11,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
-  bool isDarkMode = false; // Biến trạng thái để theo dõi chế độ sáng/tối
+  bool isDarkMode = true; // Mặc định là dark mode
 
   @override
   Widget build(BuildContext context) {

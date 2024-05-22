@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:xemphim/api/api.dart';
-import 'package:xemphim/model/movie_model.dart';
+import 'package:xemphim/model/movie_detail.dart';
+import 'package:xemphim/screens/GenreMoviesScreen.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import 'package:xemphim/widgets/App_Bar.dart';
 
 class MovieDetailsScreen extends StatefulWidget {
@@ -13,7 +16,7 @@ class MovieDetailsScreen extends StatefulWidget {
 }
 
 class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
-  late Future<Movie> _movieDetails;
+  late Future<MovieDetail> _movieDetails;
 
   @override
   void initState() {
@@ -21,25 +24,38 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
     _movieDetails = Api().getMovieDetails(widget.movieId);
   }
 
+  // Hàm mở URL của trailer
+  Future<void> _playTrailer(BuildContext context, int movieId) async {
+    final api = Api();
+    final trailerUrl = await api.getMovieTrailerUrl(movieId);
+    if (trailerUrl != null) {
+      // Kiểm tra xem URL có hợp lệ không trước khi mở
+      if (await canLaunch(trailerUrl)) {
+        await launch(trailerUrl);
+      } else {
+        // Xử lý trường hợp không thể mở URL
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Could not open the trailer.'),
+          ),
+        );
+      }
+    } else {
+      // Xử lý trường hợp không có trailer
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('No trailer available for this movie.'),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      // appBar: AppBar(
-      //   backgroundColor: Colors.black,
-      //   leading: IconButton(
-      //     icon: const Icon(
-      //       Icons.arrow_back,
-      //       size: 35,
-      //       color: Colors.white,
-      //     ),
-      //     onPressed: () {
-      //       Navigator.of(context).pop();
-      //     },
-      //   ),
-      // ),
-      appBar: CustomAppBar(),
-      body: FutureBuilder<Movie>(
+      appBar: const CustomAppBar(),
+      body: FutureBuilder<MovieDetail>(
         future: _movieDetails,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -65,9 +81,11 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       Positioned(
                         bottom: 10,
                         left: 10,
+                        right: 10,
                         child: Row(
                           children: [
                             Container(
+                              width: 390,
                               decoration: BoxDecoration(
                                 color: Colors.black54,
                                 borderRadius: BorderRadius.circular(8),
@@ -83,6 +101,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                                       fontSize: 24,
                                       fontWeight: FontWeight.bold,
                                     ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                   Text(
                                     '(${movie.releasedate.substring(0, 4)})',
@@ -141,18 +161,12 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                           ],
                         ),
                         const SizedBox(height: 16),
-                        Row(
-                          children: [
-                            const Icon(Icons.play_arrow, color: Colors.white),
-                            const SizedBox(width: 5),
-                            const Text(
-                              'Play Trailer',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            _playTrailer(context, movie.id);
+                          },
+                          icon: Icon(Icons.play_arrow),
+                          label: Text('Play Trailer'),
                         ),
                         const SizedBox(height: 16),
                         const Text(
@@ -170,7 +184,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(8),
                               child: Image.network(
-                                "https://image.tmdb.org/t/p/w500/${movie.posterpath}",
+                                "https://image.tmdb.org/t/p/w500/${movie.posterPath}",
                                 height: 150,
                                 width: 100,
                                 fit: BoxFit.cover,
@@ -188,6 +202,70 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                             ),
                           ],
                         ),
+                        const SizedBox(height: 16),
+                        const Text(
+                          'Details',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        const SizedBox(height: 8),
+                        if (movie.runtime != null)
+                          Text(
+                            'Runtime: ${movie.runtime} minutes',
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 16,
+                            ),
+                          ),
+                        const SizedBox(height: 8),
+                        if (movie.budget != null && movie.budget != 0)
+                          Text(
+                            'Budget: \$${movie.budget}',
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 16,
+                            ),
+                          ),
+                        const SizedBox(height: 8),
+                        if (movie.revenue != null && movie.revenue != 0)
+                          Text(
+                            'Revenue: \$${movie.revenue}',
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 16,
+                            ),
+                          ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            const Text(
+                              'Genres:',
+                              style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: 16,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Wrap(
+                                spacing: 8,
+                                runSpacing: 8,
+                                children: movie.genres
+                                    .map(
+                                      (genre) => GenreTag(
+                                        genreName: genre.name,
+                                        genreId: genre.id,
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
+                            ),
+                          ],
+                        )
                       ],
                     ),
                   ),
@@ -196,6 +274,51 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
             );
           }
         },
+      ),
+    );
+  }
+}
+
+class GenreTag extends StatelessWidget {
+  final String genreName;
+  final int genreId;
+
+  const GenreTag({required this.genreName, required this.genreId});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        // Chuyển qua trang xem phim theo thể loại
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => GenreMoviesScreen(
+              genreId: genreId, // Pass genreId to GenreMoviesScreen
+              genreName: genreName, // Pass genreName to GenreMoviesScreen
+            ),
+          ),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        margin: const EdgeInsets.only(right: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          gradient: const LinearGradient(
+            colors: [Colors.purple, Colors.indigo],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Text(
+          genreName,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
     );
   }

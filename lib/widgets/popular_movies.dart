@@ -68,7 +68,10 @@ class PopularSection extends StatelessWidget {
                           Stack(
                             children: [
                               ClipRRect(
-                                borderRadius: BorderRadius.circular(15),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(15.0),
+                                  topRight: Radius.circular(15.0),
+                                ),
                                 child: Image.network(
                                   "https://image.tmdb.org/t/p/original/${movie.backdropPath}",
                                   height: 300,

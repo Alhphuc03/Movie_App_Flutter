@@ -1,8 +1,11 @@
 import 'package:http/http.dart' as http;
 import 'package:xemphim/api/constants.dart';
-import 'package:xemphim/model/list_model.dart';
-import 'package:xemphim/model/movie_model.dart';
+
 import 'dart:convert';
+
+import 'package:xemphim/model/list_model.dart';
+import 'package:xemphim/model/movie_detail.dart';
+import 'package:xemphim/model/movie_model.dart';
 
 class Api {
   final upComingApiurl =
@@ -106,15 +109,29 @@ class Api {
     }
   }
 
-  Future<Movie> getMovieDetails(int movieId) async {
+  Future<MovieDetail> getMovieDetails(int movieId) async {
     final url = "https://api.themoviedb.org/3/movie/$movieId?api_key=$apiKey";
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
-      Movie movie = Movie.fromMap(data);
-      return movie;
+      MovieDetail movieDetail = MovieDetail.fromMap(data); // Change here
+      return movieDetail; // Change here
     } else {
       throw Exception('Failed to load movie details');
     }
+  }
+
+  Future<String?> getMovieTrailerUrl(int movieId) async {
+    final url =
+        "https://api.themoviedb.org/3/movie/$movieId/videos?api_key=$apiKey";
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body)['results'];
+      if (data.isNotEmpty) {
+        final String key = data[0]['key'];
+        return 'https://www.youtube.com/watch?v=$key';
+      }
+    }
+    return null;
   }
 }
