@@ -17,12 +17,21 @@ class TopRatedSection extends StatelessWidget {
         const Padding(
           padding: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 10.0),
           child: Text(
+<<<<<<< HEAD
             'Top rated',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
+=======
+            'Top Rated',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+>>>>>>> 88d58d79af0d01cada419025017891cd2898d5ed
           ),
         ),
         Container(
@@ -45,7 +54,8 @@ class TopRatedSection extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MovieDetailsScreen(movieId: movie.id),
+                          builder: (context) =>
+                              MovieDetailsScreen(movieId: movie.id),
                         ),
                       );
                     },
@@ -105,7 +115,8 @@ class TopRatedSection extends StatelessWidget {
                           ),
                           const SizedBox(height: 5),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
                             child: Center(
                               child: FittedBox(
                                 fit: BoxFit.scaleDown,

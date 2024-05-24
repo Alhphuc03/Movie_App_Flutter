@@ -87,4 +87,8 @@ class Genre {
       'name': name,
     };
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 88d58d79af0d01cada419025017891cd2898d5ed

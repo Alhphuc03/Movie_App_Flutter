@@ -19,11 +19,19 @@ class UpcomingSection extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 10.0),
           child: Text(
             'Upcoming',
+<<<<<<< HEAD
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
+=======
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+>>>>>>> 88d58d79af0d01cada419025017891cd2898d5ed
           ),
         ),
         FutureBuilder<List<Movie>>(

@@ -6,7 +6,10 @@ import 'dart:convert';
 import 'package:xemphim/model/list_model.dart';
 import 'package:xemphim/model/movie_detail.dart';
 import 'package:xemphim/model/movie_model.dart';
+<<<<<<< HEAD
 import 'package:xemphim/model/movie_review.dart';
+=======
+>>>>>>> 88d58d79af0d01cada419025017891cd2898d5ed
 
 class Api {
   final upComingApiurl =
@@ -135,6 +138,7 @@ class Api {
     }
     return null;
   }
+<<<<<<< HEAD
   Future<List<Reviews>> getMovieReviews(int movieId) async {
     final url = "https://api.themoviedb.org/3/movie/$movieId/reviews?api_key=$apiKey";
     final response = await http.get(Uri.parse(url));
@@ -146,3 +150,6 @@ class Api {
     }
   }
 }
+=======
+}
+>>>>>>> 88d58d79af0d01cada419025017891cd2898d5ed
