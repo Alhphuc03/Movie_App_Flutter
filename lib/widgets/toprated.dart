@@ -15,10 +15,14 @@ class TopRatedSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Padding(
-          padding: EdgeInsets.only(left: 5.0, top: 20.0),
+          padding: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 10.0),
           child: Text(
-            'Top Rated',
-            style: TextStyle(color: Colors.white, fontSize: 20),
+            'Top rated',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
           ),
         ),
         Container(
