@@ -16,14 +16,14 @@ class UpcomingSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Padding(
-          padding: EdgeInsets.only(bottom: 15.0, left: 5.0),
+          padding: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 10.0),
           child: Text(
             'Upcoming',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
           ),
         ),
         FutureBuilder<List<Movie>>(

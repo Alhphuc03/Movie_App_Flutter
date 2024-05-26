@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:xemphim/common/untils.dart';
 import 'package:xemphim/widgets/App_Bar.dart';
+import 'package:xemphim/widgets/bottom_nav_bar.dart';
 
 import 'package:xemphim/widgets/navigationdrawer.dart';
 import 'package:xemphim/widgets/popular_movies.dart';

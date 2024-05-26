@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:xemphim/screens/MoreScreen.dart';
+import 'package:xemphim/screens/AccoutScreen.dart';
+
 import 'package:xemphim/screens/SearchScreen.dart';
 import 'package:xemphim/screens/home.dart';
 
@@ -17,7 +18,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   final List<Widget> _screens = [
     const Home(), // Màn hình Home
     const SearchScreen(), // Màn hình Search
-    const MoreScreen(), // Màn hình More
+    const AccountScreen(), // Màn hình More
   ];
 
   // Phương thức được gọi khi một tab được chọn
@@ -48,8 +49,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
             label: 'Search',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.photo_library_outlined),
-            label: 'New & Hot',
+            icon: Icon(Icons.account_box),
+            label: 'Account',
           ),
         ],
       ),

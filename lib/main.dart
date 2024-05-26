@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:xemphim/screens/RegistrationScreen.dart';
+import 'package:xemphim/screens/SignInScreen.dart';
 import 'package:xemphim/screens/splash_screen.dart';
 
 void main() {
@@ -17,7 +19,7 @@ class MainApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const SplashScreen(),
+      home: SplashScreen(),
     );
   }
 }

@@ -111,7 +111,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             );
                           },
                           child: Container(
-                            height: 200,
+                            height: 170,
                             margin: const EdgeInsets.symmetric(vertical: 10),
                             child: Card(
                               elevation: 5,
@@ -129,7 +129,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                             child: Image.network(
                                               'https://image.tmdb.org/t/p/w200${movie['poster_path']}',
                                               width: 100,
-                                              height: 180,
+                                              // height: 180,
                                               fit: BoxFit.cover,
                                             ),
                                           )
@@ -157,9 +157,9 @@ class _SearchScreenState extends State<SearchScreen> {
                                               movie['title'],
                                               style: const TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 22,
+                                                fontSize: 20,
                                               ),
-                                              maxLines: 3,
+                                              maxLines: 2,
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
@@ -172,7 +172,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                 : 'No release date',
                                             style: const TextStyle(
                                               color: Colors.red,
-                                              fontSize: 20,
+                                              fontSize: 18,
                                             ),
                                           ),
                                           const SizedBox(height: 8),
@@ -181,14 +181,14 @@ class _SearchScreenState extends State<SearchScreen> {
                                                   children: [
                                                     const Icon(Icons.star,
                                                         color: Colors.yellow,
-                                                        size: 20),
+                                                        size: 24),
                                                     const SizedBox(width: 4),
                                                     Text(
                                                       movie['vote_average']
                                                           .toString(),
                                                       style: const TextStyle(
                                                           color: Colors.black,
-                                                          fontSize: 20),
+                                                          fontSize: 18),
                                                     ),
                                                   ],
                                                 )

@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:xemphim/model/list_model.dart';
 import 'package:xemphim/model/movie_detail.dart';
 import 'package:xemphim/model/movie_model.dart';
+import 'package:xemphim/model/movie_review.dart';
 
 class Api {
   final upComingApiurl =
@@ -133,5 +134,17 @@ class Api {
       }
     }
     return null;
+  }
+
+  Future<List<Reviews>> getMovieReviews(int movieId) async {
+    final url =
+        "https://api.themoviedb.org/3/movie/$movieId/reviews?api_key=$apiKey";
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body)['results'];
+      return data.map((review) => Reviews.fromMap(review)).toList();
+    } else {
+      throw Exception('Failed to load reviews');
+    }
   }
 }
