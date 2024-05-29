@@ -4,6 +4,7 @@ import 'package:xemphim/model/movie_detail.dart';
 import 'package:xemphim/model/movie_review.dart';
 import 'package:xemphim/screens/GenreMoviesScreen.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:xemphim/screens/TrailerScreen%20.dart';
 
 import 'package:xemphim/widgets/App_Bar.dart';
 
@@ -19,7 +20,8 @@ class MovieDetailsScreen extends StatefulWidget {
 class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   late Future<MovieDetail> _movieDetails;
   late Future<List<Reviews>> _movieReviews;
-  bool _seeAllReviews = false; // Thêm biến này để quản lý chế độ hiển thị review
+  bool _seeAllReviews =
+      false; // Thêm biến này để quản lý chế độ hiển thị review
 
   @override
   void initState() {
@@ -147,15 +149,18 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                               ),
                             ),
                             const SizedBox(width: 16),
-                            const Icon(Icons.star, color: Colors.amber, size: 24),
+                            const Icon(Icons.star,
+                                color: Colors.amber, size: 24),
                             const SizedBox(width: 8),
                             Container(
                               decoration: BoxDecoration(
                                 color: Colors.black54,
-                                border: Border.all(color: Colors.amber, width: 2),
+                                border:
+                                    Border.all(color: Colors.amber, width: 2),
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 6),
                               child: Text(
                                 '${movie.voteaverage}',
                                 style: const TextStyle(
@@ -248,9 +253,31 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                           ),
                         ),
                         const SizedBox(height: 16),
+                        // ElevatedButton.icon(
+                        //   onPressed: () {
+                        //     _playTrailer(context, movie.id);
+                        //   },
+                        //   icon: const Icon(Icons.play_arrow),
+                        //   label: const Text('Play Trailer'),
+                        //   style: ElevatedButton.styleFrom(
+                        //     backgroundColor: Colors.amber,
+                        //     foregroundColor: Colors.black,
+                        //     shape: RoundedRectangleBorder(
+                        //       borderRadius: BorderRadius.circular(8),
+                        //     ),
+                        //     padding: const EdgeInsets.symmetric(
+                        //         horizontal: 24, vertical: 12),
+                        //   ),
+                        // ),
                         ElevatedButton.icon(
                           onPressed: () {
-                            _playTrailer(context, movie.id);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      // TrailerScreen(movieId: movie.id),
+                                      YoutubePlayerExample(movieId: movie.id)),
+                            );
                           },
                           icon: const Icon(Icons.play_arrow),
                           label: const Text('Play Trailer'),
@@ -260,9 +287,11 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 12),
                           ),
                         ),
+
                         const SizedBox(height: 16),
                         const Text(
                           'Reviews',
@@ -276,15 +305,22 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                         FutureBuilder<List<Reviews>>(
                           future: _movieReviews,
                           builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
-                              return const Center(child: CircularProgressIndicator());
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
                             } else if (snapshot.hasError) {
-                              return Center(child: Text('Error: ${snapshot.error}'));
-                            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                              return const Center(child: Text('No reviews found.'));
+                              return Center(
+                                  child: Text('Error: ${snapshot.error}'));
+                            } else if (!snapshot.hasData ||
+                                snapshot.data!.isEmpty) {
+                              return const Center(
+                                  child: Text('No reviews found.'));
                             } else {
                               final reviews = snapshot.data!;
-                              final displayReviews = _seeAllReviews ? reviews : reviews.take(3).toList();
+                              final displayReviews = _seeAllReviews
+                                  ? reviews
+                                  : reviews.take(3).toList();
                               return Column(
                                 children: [
                                   SingleChildScrollView(
@@ -296,14 +332,17 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                                           child: Card(
                                             color: Colors.black87,
                                             child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
                                               child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   Row(
                                                     children: [
                                                       CircleAvatar(
-                                                        backgroundImage: NetworkImage(
+                                                        backgroundImage:
+                                                            NetworkImage(
                                                           "https://image.tmdb.org/t/p/w500${review.avatarPath}",
                                                         ),
                                                       ),
@@ -312,7 +351,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                                                         review.author,
                                                         style: const TextStyle(
                                                           color: Colors.white,
-                                                          fontWeight: FontWeight.bold,
+                                                          fontWeight:
+                                                              FontWeight.bold,
                                                         ),
                                                       ),
                                                     ],
@@ -320,17 +360,24 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                                                   const SizedBox(height: 8),
                                                   Text(
                                                     review.content,
-                                                    style: const TextStyle(color: Colors.white70),
+                                                    style: const TextStyle(
+                                                        color: Colors.white70),
                                                     maxLines: 3,
-                                                    overflow: TextOverflow.ellipsis,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                   ),
                                                   Row(
                                                     children: [
-                                                      const Icon(Icons.star, color: Colors.amber, size: 16),
+                                                      const Icon(Icons.star,
+                                                          color: Colors.amber,
+                                                          size: 16),
                                                       const SizedBox(width: 4),
                                                       Text(
-                                                        review.rating.toString(),
-                                                        style: const TextStyle(color: Colors.white),
+                                                        review.rating
+                                                            .toString(),
+                                                        style: const TextStyle(
+                                                            color:
+                                                                Colors.white),
                                                       ),
                                                     ],
                                                   ),
@@ -351,7 +398,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                                       },
                                       child: Text(
                                         _seeAllReviews ? 'See Less' : 'See All',
-                                        style: const TextStyle(color: Colors.amber),
+                                        style: const TextStyle(
+                                            color: Colors.amber),
                                       ),
                                     ),
                                 ],
