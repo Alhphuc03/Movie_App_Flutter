@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:xemphim/api/api.dart';
 import 'package:xemphim/model/movie_detail.dart';
+import 'package:xemphim/model/movie_provider';
 import 'package:xemphim/model/movie_review.dart';
+import 'package:xemphim/model/movie_similar.dart';
 import 'package:xemphim/screens/GenreMoviesScreen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:xemphim/screens/TrailerScreen%20.dart';
@@ -20,6 +22,8 @@ class MovieDetailsScreen extends StatefulWidget {
 class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   late Future<MovieDetail> _movieDetails;
   late Future<List<Reviews>> _movieReviews;
+  late Future<MovieSimilar> _movieSimilar;
+  late Future<List<Provider>> _provider;
   bool _seeAllReviews =
       false; // Thêm biến này để quản lý chế độ hiển thị review
 
@@ -28,6 +32,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
     super.initState();
     _movieDetails = Api().getMovieDetails(widget.movieId);
     _movieReviews = Api().getMovieReviews(widget.movieId);
+    _movieSimilar = Api().getMovieSimilar(widget.movieId);
+    _provider = Api().getProvider(widget.movieId);
   }
 
   // Hàm mở URL của trailer
@@ -276,7 +282,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                               MaterialPageRoute(
                                   builder: (context) =>
                                       // TrailerScreen(movieId: movie.id),
-                                      YoutubePlayerExample(movieId: movie.id)),
+                                      YoutubePlayerTrailer(movieId: movie.id)),
                             );
                           },
                           icon: const Icon(Icons.play_arrow),
@@ -402,6 +408,159 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                                             color: Colors.amber),
                                       ),
                                     ),
+                                  const SizedBox(height: 16),
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: const Text(
+                                      'Similar Movies',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  FutureBuilder<MovieSimilar>(
+                                    future: _movieSimilar,
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const Center(
+                                            child: CircularProgressIndicator());
+                                      } else if (snapshot.hasError) {
+                                        return Center(
+                                            child: Text(
+                                                'Error: ${snapshot.error}'));
+                                      } else if (!snapshot.hasData ||
+                                          snapshot.data!.movies.isEmpty) {
+                                        return const Center(
+                                            child: Text(
+                                                'No similar movies found.'));
+                                      } else {
+                                        final similarMovies =
+                                            snapshot.data!.movies;
+                                        return SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Row(
+                                            children:
+                                                similarMovies.map((movie) {
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  // Handle tapping on a similar movie
+                                                },
+                                                child: Container(
+                                                  width: 150,
+                                                  margin: const EdgeInsets.only(
+                                                      right: 8),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                        child: Image.network(
+                                                          "https://image.tmdb.org/t/p/w200/${movie.posterPath}",
+                                                          height: 200,
+                                                          width: 150,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                      const SizedBox(height: 8),
+                                                      Text(
+                                                        movie.title,
+                                                        style: const TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                        maxLines: 2,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                  const SizedBox(height: 8),
+                                  const Text(
+                                    'Providers',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Container(
+                                    height:
+                                        50, // Đảm bảo chiều cao của container đủ để hiển thị hình ảnh
+                                    child: FutureBuilder<List<Provider>>(
+                                      future: _provider,
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return Center(
+                                              child:
+                                                  CircularProgressIndicator());
+                                        } else if (snapshot.hasError) {
+                                          return Center(
+                                              child: Text(
+                                                  'Error: ${snapshot.error}'));
+                                        } else if (!snapshot.hasData ||
+                                            snapshot.data!.isEmpty) {
+                                          return SizedBox
+                                              .shrink(); // Trả về một widget trống nếu không có dữ liệu
+                                        } else {
+                                          final List<Provider> providers = snapshot
+                                              .data!; // Chuyển đổi sang danh sách các nhà cung cấp
+                                          final Set<int> addedProviderIds =
+                                              {}; // Set để lưu trữ các provider_id đã được thêm vào
+                                          final List<Widget> uniqueProviders =
+                                              []; // Danh sách các nhà cung cấp duy nhất
+                                          providers.forEach((provider) {
+                                            if (!addedProviderIds.contains(
+                                                provider.providerId)) {
+                                              // Kiểm tra xem provider_id đã tồn tại trong Set chưa
+                                              addedProviderIds.add(provider
+                                                  .providerId); // Thêm provider_id vào Set
+                                              uniqueProviders.add(
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    // Xử lý khi nhấn vào một nhà cung cấp
+                                                  },
+                                                  child: Container(
+                                                    margin: EdgeInsets.only(
+                                                        right: 8),
+                                                    child: Image.network(
+                                                      "https://image.tmdb.org/t/p/w200/${provider.logoPath}",
+                                                      height: 50,
+                                                      width: 50,
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                          });
+                                          return SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            child: Row(
+                                              children: uniqueProviders,
+                                            ),
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  ),
                                 ],
                               );
                             }

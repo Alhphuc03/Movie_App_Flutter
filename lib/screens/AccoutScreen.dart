@@ -162,27 +162,29 @@ class _AccountScreenState extends State<AccountScreen> {
               Expanded(
                 child: ListView(
                   children: [
-                    _buildListTile(
-                      icon: Icons.movie,
-                      title: 'Favorite Movie',
-                      onTap: () {
-                        // Handle Favorite Movie tap
-                      },
-                    ),
-                    _buildListTile(
-                      icon: Icons.tv,
-                      title: 'Favorite TV',
-                      onTap: () {
-                        // Handle Favorite TV tap
-                      },
-                    ),
-                    _buildListTile(
-                      icon: Icons.watch_later,
-                      title: 'WatchList',
-                      onTap: () {
-                        // Handle WatchList tap
-                      },
-                    ),
+                    if (sessionId.isNotEmpty) ...[
+                      _buildListTile(
+                        icon: Icons.movie,
+                        title: 'Favorite Movie',
+                        onTap: () {
+                          // Handle Favorite Movie tap
+                        },
+                      ),
+                      _buildListTile(
+                        icon: Icons.tv,
+                        title: 'Favorite TV',
+                        onTap: () {
+                          // Handle Favorite TV tap
+                        },
+                      ),
+                      _buildListTile(
+                        icon: Icons.watch_later,
+                        title: 'WatchList',
+                        onTap: () {
+                          // Handle WatchList tap
+                        },
+                      ),
+                    ],
                     _buildListTile(
                       icon: sessionId.isNotEmpty
                           ? Icons.logout_outlined

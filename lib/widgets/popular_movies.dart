@@ -15,7 +15,7 @@ class PopularSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          padding: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 10.0),
+          padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -69,9 +69,9 @@ class PopularSection extends StatelessWidget {
                             children: [
                               ClipRRect(
                                 borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(15),
-                              topRight: Radius.circular(15),
-                            ),
+                                  topLeft: Radius.circular(15),
+                                  topRight: Radius.circular(15),
+                                ),
                                 child: Image.network(
                                   "https://image.tmdb.org/t/p/original/${movie.backdropPath}",
                                   height: 300,

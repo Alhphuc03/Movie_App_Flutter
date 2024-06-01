@@ -1,74 +1,19 @@
-// import 'package:flutter/material.dart';
-// import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-// import 'package:xemphim/api/api.dart';
-
-// class TrailerScreen extends StatefulWidget {
-//   final int movieId;
-
-//   const TrailerScreen({Key? key, required this.movieId}) : super(key: key);
-
-//   @override
-//   State<TrailerScreen> createState() => _TrailerScreenState();
-// }
-
-// class _TrailerScreenState extends State<TrailerScreen> {
-//   late Future<String?> _trailerUrl;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _trailerUrl = Api().getMovieTrailerUrl(widget.movieId);
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text('Trailer')),
-//       body: FutureBuilder<String?>(
-//         future: _trailerUrl,
-//         builder: (context, snapshot) {
-//           if (snapshot.connectionState == ConnectionState.waiting) {
-//             return const Center(child: CircularProgressIndicator());
-//           } else if (snapshot.hasError) {
-//             return Center(child: Text('Error: ${snapshot.error}'));
-//           } else {
-//             final trailerUrl = snapshot.data;
-//             if (trailerUrl != null) {
-//               return YoutubePlayer(
-//                 controller: YoutubePlayerController(
-//                   initialVideoId: YoutubePlayer.convertUrlToId(trailerUrl)!,
-//                   flags: const YoutubePlayerFlags(
-//                     autoPlay: false,
-//                   ),
-//                 ),
-//                 showVideoProgressIndicator: true,
-//                 onReady: () => debugPrint('Player is ready.'),
-//               );
-//             } else {
-//               return const Center(child: Text('No trailer available'));
-//             }
-//           }
-//         },
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'package:xemphim/api/api.dart';
+import 'package:xemphim/widgets/App_Bar.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-class YoutubePlayerExample extends StatefulWidget {
+class YoutubePlayerTrailer extends StatefulWidget {
   final int movieId;
 
-  const YoutubePlayerExample({Key? key, required this.movieId})
+  const YoutubePlayerTrailer({Key? key, required this.movieId})
       : super(key: key);
 
   @override
-  State<YoutubePlayerExample> createState() => _YoutubePlayerExampleState();
+  State<YoutubePlayerTrailer> createState() => _YoutubePlayerTrailerState();
 }
 
-class _YoutubePlayerExampleState extends State<YoutubePlayerExample> {
+class _YoutubePlayerTrailerState extends State<YoutubePlayerTrailer> {
   late Future<String?> _trailerUrlFuture;
   YoutubePlayerController? _controller;
 
@@ -93,7 +38,7 @@ class _YoutubePlayerExampleState extends State<YoutubePlayerExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Youtube Player Example')),
+      appBar: CustomAppBar(),
       body: FutureBuilder<String?>(
         future: _trailerUrlFuture,
         builder: (context, snapshot) {

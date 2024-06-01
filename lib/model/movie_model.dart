@@ -22,15 +22,15 @@ class Movie {
 
   factory Movie.fromMap(Map<String, dynamic> map) {
     return Movie(
-      title: map['title'],
-      backdropPath: map['backdrop_path'],
-      overview: map['overview'],
-      posterpath: map['poster_path'],
-      voteaverage: map['vote_average'].toDouble(),
-      releasedate: map['release_date'],
-      popularity: map['popularity'].toDouble(),
-      posterPath: map['poster_path'],
-      id: map['id'],
+      title: map['title'] ?? '',
+      backdropPath: map['backdrop_path'] ?? '',
+      overview: map['overview'] ?? '',
+      posterpath: map['poster_path'] ?? '',
+      voteaverage: (map['vote_average'] ?? 0.0).toDouble(),
+      releasedate: map['release_date'] ?? '',
+      popularity: (map['popularity'] ?? 0.0).toDouble(),
+      posterPath: map['poster_path'] ?? '',
+      id: map['id'] ?? 0,
     );
   }
 

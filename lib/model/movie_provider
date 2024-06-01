@@ -1,0 +1,22 @@
+class Provider {
+  final String logoPath;
+  final String providerName;
+  final int providerId;
+  final int displayPriority;
+
+  Provider({
+    required this.logoPath,
+    required this.providerName,
+    required this.providerId,
+    required this.displayPriority,
+  });
+
+  factory Provider.fromMap(Map<String, dynamic> map) {
+    return Provider(
+      logoPath: map['logo_path'],
+      providerName: map['provider_name'],
+      providerId: map['provider_id'],
+      displayPriority: map['display_priority'],
+    );
+  }
+}

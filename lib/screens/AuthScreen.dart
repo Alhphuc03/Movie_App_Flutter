@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:xemphim/screens/RegistrationScreen.dart';
 import 'package:xemphim/screens/SignInScreen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({Key? key}) : super(key: key);
@@ -14,6 +16,15 @@ class _AuthScreenState extends State<AuthScreen> {
       context,
       MaterialPageRoute(builder: (context) => LoginScreen()),
     );
+  }
+
+  void _navigateSignUpScreen() async {
+    const url = 'https://www.themoviedb.org/signup';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   @override
@@ -98,7 +109,7 @@ class _AuthScreenState extends State<AuthScreen> {
               ),
               const SizedBox(height: 20),
               OutlinedButton(
-                onPressed: () {},
+                onPressed: _navigateSignUpScreen,
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 100,
