@@ -1,5 +1,6 @@
 class MovieDetail {
   final String title;
+  final String original_title;
   final String backdropPath;
   final String overview;
   final String posterpath;
@@ -15,6 +16,7 @@ class MovieDetail {
 
   MovieDetail({
     required this.title,
+    required this.original_title,
     required this.backdropPath,
     required this.overview,
     required this.posterpath,
@@ -32,13 +34,15 @@ class MovieDetail {
   factory MovieDetail.fromMap(Map<String, dynamic> map) {
     return MovieDetail(
       title: map['title'],
+      original_title: map['original_title'],
       backdropPath: map['backdrop_path'],
       overview: map['overview'],
       posterpath: map['poster_path'],
       voteaverage: map['vote_average'].toDouble(),
       releasedate: map['release_date'],
       popularity: map['popularity'].toDouble(),
-      posterPath: map['poster_path'],
+      posterPath: map['poster_path'] ??
+          '', // Kiểm tra null ở đây và gán giá trị mặc định nếu là null
       id: map['id'],
       runtime: map['runtime'] ?? 0,
       budget: map['budget'] ?? 0,
@@ -52,6 +56,7 @@ class MovieDetail {
   Map<String, dynamic> toMap() {
     return {
       'title': title,
+      'original_title': original_title,
       'backdropPath': backdropPath,
       'overview': overview,
       'posterpath': posterpath,

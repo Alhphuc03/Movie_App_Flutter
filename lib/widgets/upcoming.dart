@@ -13,9 +13,13 @@ class UpcomingSection extends StatelessWidget {
 
     return Stack(
       children: [
-        Positioned.fill(
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 320, // Set your desired height here
           child: Image.asset(
-            'assets/banner-carousel.png',
+            'assets/banner-carousel.png', // Replace with your asset path
             fit: BoxFit.cover,
           ),
         ),
@@ -23,7 +27,7 @@ class UpcomingSection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Padding(
-              padding: EdgeInsets.fromLTRB(15.0, 20.0, 0, 0),
+              padding: EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 10.0),
               child: Text(
                 'Upcoming',
                 style: TextStyle(
@@ -54,36 +58,45 @@ class UpcomingSection extends StatelessWidget {
                           ),
                         );
                       },
-                      child: Stack(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Phía sau hình ảnh
-                          Positioned.fill(
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(15),
-                              child: Image.network(
-                                "https://image.tmdb.org/t/p/original/${movie.backdropPath}",
-                                height: 150,
+                          const SizedBox(height: 70),
+                          Stack(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Image.network(
+                                    "https://image.tmdb.org/t/p/original/${movie.backdropPath}",
+                                    height: 170,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          // Container chứa văn bản và màu nền mờ
-                          Container(
-                            width: double.infinity,
-                            padding: EdgeInsets.only(top: 160, left: 10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Màu nền đỏ
-                                Container(
+                              Positioned(
+                                bottom: 10,
+                                left: 15,
+                                right: 15,
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width -
+                                      10 -
+                                      10 -
+                                      5 -
+                                      5,
                                   decoration: BoxDecoration(
-                                    color: Color.fromARGB(134, 92, 92, 92),
+                                    color:
+                                        const Color.fromARGB(137, 77, 76, 76),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
+                                  padding: const EdgeInsets.all(8),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      const SizedBox(width: 4),
                                       Text(
                                         movie.title,
                                         style: const TextStyle(
@@ -91,12 +104,21 @@ class UpcomingSection extends StatelessWidget {
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                         ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      Text(
+                                        '(${movie.releasedate.substring(0, 4)})',
+                                        style: const TextStyle(
+                                          color: Colors.white70,
+                                          fontSize: 14,
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -105,7 +127,7 @@ class UpcomingSection extends StatelessWidget {
                   options: CarouselOptions(
                     autoPlay: true,
                     enlargeCenterPage: true,
-                    aspectRatio: 1.8,
+                    aspectRatio: 1.4,
                     autoPlayInterval: const Duration(seconds: 3),
                   ),
                 );

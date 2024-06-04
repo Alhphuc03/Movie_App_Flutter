@@ -9,7 +9,6 @@ import 'package:xemphim/model/movie_provider';
 import 'package:xemphim/model/movie_review.dart';
 import 'package:xemphim/model/movie_similar.dart';
 
-
 class Api {
   final upComingApiurl =
       "https://api.themoviedb.org/3/movie/upcoming?api_key=$apiKey";
@@ -149,8 +148,10 @@ class Api {
       throw Exception('Failed to load reviews');
     }
   }
-   Future<MovieSimilar> getMovieSimilar(int movieId) async {
-    final url = "https://api.themoviedb.org/3/movie/$movieId/similar?api_key=$apiKey";
+
+  Future<MovieSimilar> getMovieSimilar(int movieId) async {
+    final url =
+        "https://api.themoviedb.org/3/movie/$movieId/similar?api_key=$apiKey";
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
@@ -160,47 +161,4 @@ class Api {
       throw Exception('Failed to load movie similar');
     }
   }
-Future<List<Provider>> getProvider(int movieId) async {
-  
-  final url = 'https://api.themoviedb.org/3/movie/$movieId/watch/providers?api_key=$apiKey';
-  
-  final response = await http.get(Uri.parse(url));
-
-  if (response.statusCode == 200) {
-    final dynamic responseData = json.decode(response.body);
-
-    if (responseData is Map<String, dynamic> && responseData.containsKey('results')) {
-      final Map<String, dynamic> results = responseData['results'];
-
-      // Tạo danh sách providers từ dữ liệu phản hồi
-      List<Provider> providers = [];
-
-      // Lặp qua mỗi quốc gia trong dữ liệu phản hồi
-      results.forEach((country, countryData) {
-        // Lấy danh sách các nhà cung cấp phim từ dữ liệu của từng quốc gia
-        List<dynamic> flatrate = countryData['flatrate'] ?? [];
-        List<dynamic> rent = countryData['rent'] ?? [];
-        List<dynamic> buy = countryData['buy'] ?? [];
-
-        // Lặp qua từng nhà cung cấp trong danh sách và thêm vào providers
-        flatrate.forEach((providerData) {
-          providers.add(Provider.fromMap(providerData));
-        });
-        rent.forEach((providerData) {
-          providers.add(Provider.fromMap(providerData));
-        });
-        buy.forEach((providerData) {
-          providers.add(Provider.fromMap(providerData));
-        });
-      });
-
-      return providers;
-    } else {
-      throw Exception('Invalid response format');
-    }
-  } else {
-    throw Exception('Failed to load providers');
-  }
-}
-
 }
