@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:xemphim/model/movie_similar.dart';
-import 'package:xemphim/widgets/SimilarMovieCard.dart';
+import 'package:xemphim/widgets/detail/SimilarMovieCard.dart';
 
 
 class SimilarMoviesSection extends StatelessWidget {

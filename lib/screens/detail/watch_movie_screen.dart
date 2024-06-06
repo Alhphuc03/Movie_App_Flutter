@@ -20,8 +20,8 @@ class WatchMovieScreen extends StatefulWidget {
 class _WatchMovieScreenState extends State<WatchMovieScreen> {
   late Future<Map<String, dynamic>> _movieFuture;
   bool _disposed = false;
-  late VideoPlayerController _videoPlayerController;
-  late ChewieController _chewieController;
+  VideoPlayerController? _videoPlayerController;
+  ChewieController? _chewieController;
   String _linkm3u8 = '';
 
   @override
@@ -33,8 +33,8 @@ class _WatchMovieScreenState extends State<WatchMovieScreen> {
   @override
   void dispose() {
     _disposed = true;
-    _videoPlayerController.dispose();
-    _chewieController.dispose();
+    _videoPlayerController?.dispose();
+    _chewieController?.dispose();
     super.dispose();
   }
 
@@ -42,18 +42,18 @@ class _WatchMovieScreenState extends State<WatchMovieScreen> {
     _linkm3u8 = linkm3u8;
     _videoPlayerController = VideoPlayerController.network(linkm3u8);
     _chewieController = ChewieController(
-      videoPlayerController: _videoPlayerController,
+      videoPlayerController: _videoPlayerController!,
       autoPlay: true,
       looping: true,
-      allowFullScreen: true, // Cho phép chuyển sang toàn màn hình
-      aspectRatio: 16 / 9, // Tỉ lệ khung hình
-      showControlsOnInitialize: false, // Ẩn thanh điều khiển ban đầu
-      showControls: true, // Hiển thị thanh điều khiển khi chạm vào video
+      allowFullScreen: true, // Allow full screen
+      aspectRatio: 16 / 9, // Aspect ratio
+      showControlsOnInitialize: false, // Hide controls initially
+      showControls: true, // Show controls on touch
       materialProgressColors: ChewieProgressColors(
-        playedColor: Colors.red, // Màu sắc cho phần đã phát
-        handleColor: Colors.blue, // Màu sắc cho nút kéo thanh tiến độ
-        bufferedColor: Colors.grey, // Màu sắc cho phần đã đệm
-        backgroundColor: Colors.black, // Màu sắc nền của thanh tiến độ
+        playedColor: Colors.red, // Played part color
+        handleColor: Colors.blue, // Handle color
+        bufferedColor: Colors.grey, // Buffered part color
+        backgroundColor: Colors.black, // Background color
       ),
     );
   }
@@ -79,37 +79,41 @@ class _WatchMovieScreenState extends State<WatchMovieScreen> {
         builder: (BuildContext context,
             AsyncSnapshot<Map<String, dynamic>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasData) {
             final movieData = snapshot.data ?? {};
             final episodes = movieData['episodes'] as List<dynamic>? ?? [];
 
             final linkm3u8 = episodes.isNotEmpty
-                ? (episodes[0]['server_data'][0]['link_m3u8'] ??
-                    'Link not available')
-                : 'No episodes available';
+                ? (episodes[0]['server_data'][0]['link_m3u8'] ?? '')
+                : '';
 
-            _initializeVideoPlayer(linkm3u8);
-
-            return SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: Chewie(
-                      controller: _chewieController,
+            if (linkm3u8.isNotEmpty) {
+              _initializeVideoPlayer(linkm3u8);
+              return SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AspectRatio(
+                      aspectRatio: 16 / 9,
+                      child: Chewie(
+                        controller: _chewieController!,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            );
+                  ],
+                ),
+              );
+            } else {
+              return const Center(
+                child: Text('No movie available.'),
+              );
+            }
           } else if (snapshot.hasError) {
             return Center(
               child: Text('An error occurred: ${snapshot.error}'),
             );
           } else {
-            return Center(
+            return const Center(
               child: Text('Movie not found.'),
             );
           }

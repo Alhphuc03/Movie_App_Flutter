@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:xemphim/common/session_manager.dart';
-import 'package:xemphim/screens/AccoutScreen.dart';
+import 'package:xemphim/screens/account/account_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override

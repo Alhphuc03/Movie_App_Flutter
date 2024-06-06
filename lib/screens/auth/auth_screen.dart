@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:xemphim/screens/RegistrationScreen.dart';
-import 'package:xemphim/screens/SignInScreen.dart';
+import 'package:xemphim/screens/auth/registration_screen.dart';
+import 'package:xemphim/screens/auth/sign_in_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AuthScreen extends StatefulWidget {

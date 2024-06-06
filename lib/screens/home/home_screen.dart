@@ -3,10 +3,10 @@ import 'package:xemphim/common/untils.dart';
 import 'package:xemphim/widgets/App_Bar.dart';
 import 'package:xemphim/widgets/bottom_nav_bar.dart';
 
-import 'package:xemphim/widgets/navigationdrawer.dart';
-import 'package:xemphim/widgets/popular_movies.dart';
-import 'package:xemphim/widgets/toprated.dart';
-import 'package:xemphim/widgets/upcoming.dart';
+import 'package:xemphim/widgets/navigation_drawer.dart';
+import 'package:xemphim/widgets/home/popular_movies.dart';
+import 'package:xemphim/widgets/home/toprated.dart';
+import 'package:xemphim/widgets/home/upcoming.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);

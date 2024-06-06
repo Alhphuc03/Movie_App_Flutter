@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:xemphim/screens/AccoutScreen.dart';
+import 'package:xemphim/screens/account/account_screen.dart';
 
-import 'package:xemphim/screens/SearchScreen.dart';
-import 'package:xemphim/screens/home.dart';
+import 'package:xemphim/screens/search/search_screen.dart';
+import 'package:xemphim/screens/home/home_screen.dart';
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({Key? key}) : super(key: key);

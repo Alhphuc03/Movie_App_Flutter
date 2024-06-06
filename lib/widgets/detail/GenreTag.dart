@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:xemphim/screens/GenreMoviesScreen.dart';
+import 'package:xemphim/screens/genre/genre_movies_screen.dart';
 
 
 class GenreTag extends StatelessWidget {

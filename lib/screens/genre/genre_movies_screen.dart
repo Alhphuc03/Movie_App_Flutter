@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:xemphim/api/api.dart';
 import 'package:xemphim/common/untils.dart';
 import 'package:xemphim/model/movie_model.dart';
-import 'package:xemphim/screens/detail.dart';
+import 'package:xemphim/screens/detail/detail_screen.dart';
 import 'package:xemphim/widgets/App_Bar.dart';
-import 'package:xemphim/widgets/navigationdrawer.dart';
+import 'package:xemphim/widgets/navigation_drawer.dart';
 
 class GenreMoviesScreen extends StatefulWidget {
   final int genreId;

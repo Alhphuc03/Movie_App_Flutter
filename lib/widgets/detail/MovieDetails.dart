@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:xemphim/model/movie_detail.dart';
-import 'package:xemphim/screens/TrailerScreen%20.dart';
-import 'package:xemphim/screens/WatchMovie.dart'; // Add this import
-import 'package:xemphim/widgets/GenreTag.dart';
+import 'package:xemphim/screens/detail/trailer_screen.dart';
+import 'package:xemphim/screens/detail/watch_movie_screen.dart'; // Add this import
+import 'package:xemphim/widgets/detail/GenreTag.dart';
 
 class MovieDetails extends StatelessWidget {
   final MovieDetail movie;

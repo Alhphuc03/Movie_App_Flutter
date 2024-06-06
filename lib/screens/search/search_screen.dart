@@ -3,8 +3,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:xemphim/widgets/App_Bar.dart';
-import 'package:xemphim/widgets/navigationdrawer.dart';
-import 'package:xemphim/screens/detail.dart'; // Import the detail screen
+import 'package:xemphim/widgets/navigation_drawer.dart';
+import 'package:xemphim/screens/detail/detail_screen.dart'; // Import the detail screen
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});

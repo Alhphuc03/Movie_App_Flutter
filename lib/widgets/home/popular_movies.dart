@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:xemphim/api/api.dart';
 import 'package:xemphim/model/movie_model.dart';
-import 'package:xemphim/screens/detail.dart';
+import 'package:xemphim/screens/detail/detail_screen.dart';
 
 class PopularSection extends StatelessWidget {
   const PopularSection({Key? key}) : super(key: key);

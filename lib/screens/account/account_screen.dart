@@ -3,8 +3,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:xemphim/common/session_manager.dart';
-import 'package:xemphim/screens/AuthScreen.dart';
-import 'package:xemphim/screens/home.dart';
+import 'package:xemphim/screens/auth/auth_screen.dart';
+import 'package:xemphim/screens/home/home_screen.dart';
 import 'package:xemphim/widgets/App_Bar.dart';
 
 const kBackgroundColor = Color.fromARGB(255, 9, 9, 24);

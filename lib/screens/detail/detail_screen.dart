@@ -4,11 +4,11 @@ import 'package:xemphim/model/movie_detail.dart';
 
 import 'package:xemphim/model/movie_review.dart';
 import 'package:xemphim/model/movie_similar.dart';
-import 'package:xemphim/widgets/MovieBackdrop.dart';
-import 'package:xemphim/widgets/MovieDetails.dart';
-import 'package:xemphim/widgets/MovieInfo.dart';
-import 'package:xemphim/widgets/ReviewsSection.dart';
-import 'package:xemphim/widgets/SimilarMoviesSection.dart';
+import 'package:xemphim/widgets/detail/MovieBackdrop.dart';
+import 'package:xemphim/widgets/detail/MovieDetails.dart';
+import 'package:xemphim/widgets/detail/MovieInfo.dart';
+import 'package:xemphim/widgets/detail/ReviewsSection.dart';
+import 'package:xemphim/widgets/detail/SimilarMoviesSection.dart';
 
 import 'package:xemphim/widgets/app_bar.dart';
 
