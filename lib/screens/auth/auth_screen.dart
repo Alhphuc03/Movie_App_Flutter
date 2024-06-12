@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:xemphim/screens/auth/registration_screen.dart';
 import 'package:xemphim/screens/auth/sign_in_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:xemphim/screens/auth/sign_up.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({Key? key}) : super(key: key);
@@ -18,13 +19,11 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 
-  void _navigateSignUpScreen() async {
-    const url = 'https://www.themoviedb.org/signup';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
+  void _navigateSignUpScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SignUp()),
+    );
   }
 
   @override

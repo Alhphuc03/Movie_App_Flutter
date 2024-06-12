@@ -12,7 +12,7 @@ class MovieBackdrop extends StatelessWidget {
       children: [
         Image.network(
           "https://image.tmdb.org/t/p/original/${movie.backdropPath}",
-          height: 300,
+          height: 250,
           width: double.infinity,
           fit: BoxFit.cover,
         ),

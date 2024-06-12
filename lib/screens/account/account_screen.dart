@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
+import 'package:xemphim/common/AvatarManager.dart';
 import 'package:xemphim/common/session_manager.dart';
 import 'package:xemphim/screens/auth/auth_screen.dart';
-import 'package:xemphim/screens/home/home_screen.dart';
 import 'package:xemphim/widgets/App_Bar.dart';
 
 const kBackgroundColor = Color.fromARGB(255, 9, 9, 24);
@@ -19,7 +18,6 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-  String _avatarUrl = '';
   String _accountName = '';
 
   Future<void> _fetchAccountDetails(String sessionId) async {
@@ -28,11 +26,9 @@ class _AccountScreenState extends State<AccountScreen> {
     }
 
     final String apiKey = '5744c461b4e9a5730311b1bacdc9a337';
-    final String accountId = '17863072';
-
     final response = await http.get(
       Uri.parse(
-          'https://api.themoviedb.org/3/account/$accountId?api_key=$apiKey&session_id=$sessionId'),
+          'https://api.themoviedb.org/3/account?api_key=$apiKey&session_id=$sessionId'),
       headers: {
         'Authorization': 'Bearer $sessionId',
         'Accept': 'application/json',
@@ -42,36 +38,40 @@ class _AccountScreenState extends State<AccountScreen> {
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       final String username = data['username'];
-      final String avatarPath = data['avatar']['tmdb']['avatar_path'];
-      setState(() {
-        _accountName = username ?? '';
-        _avatarUrl = avatarPath != null
-            ? 'https://image.tmdb.org/t/p/w200$avatarPath'
-            : '';
-      });
+      final String? avatarPath = data['avatar']['tmdb']['avatar_path'];
+      if (mounted) {
+        setState(() {
+          _accountName = username ?? '';
+          GlobalManager.avatarUrl = avatarPath != null
+              ? 'https://image.tmdb.org/t/p/w200$avatarPath'
+              : '';
+        });
+      }
     } else {
-      _showErrorDialog(message: 'Failed to get account details.');
+      _showErrorDialog(message: 'Không thể lấy thông tin tài khoản.');
     }
   }
 
   void _showErrorDialog({required String message}) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Error'),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
+    if (mounted) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Lỗi'),
+            content: Text(message),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   void _navigateToAuthScreen() {
@@ -83,9 +83,11 @@ class _AccountScreenState extends State<AccountScreen> {
 
   void _logout() {
     SessionManager.clearSession();
+    GlobalManager.clearAvatarUrl();
+
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => const Home()),
+      MaterialPageRoute(builder: (context) => const AccountScreen()),
       (Route<dynamic> route) => false,
     );
   }
@@ -125,8 +127,8 @@ class _AccountScreenState extends State<AccountScreen> {
                 children: [
                   CircleAvatar(
                     radius: 40.0,
-                    backgroundImage: _avatarUrl.isNotEmpty
-                        ? NetworkImage(_avatarUrl)
+                    backgroundImage: GlobalManager.avatarUrl.isNotEmpty
+                        ? NetworkImage(GlobalManager.avatarUrl)
                         : const AssetImage('assets/default_avatar.png')
                             as ImageProvider,
                   ),
@@ -167,21 +169,21 @@ class _AccountScreenState extends State<AccountScreen> {
                         icon: Icons.movie,
                         title: 'Favorite Movie',
                         onTap: () {
-                          // Handle Favorite Movie tap
+                          // Xử lý sự kiện khi nhấn vào Phim yêu thích
                         },
                       ),
                       _buildListTile(
                         icon: Icons.tv,
                         title: 'Favorite TV',
                         onTap: () {
-                          // Handle Favorite TV tap
+                          // Xử lý sự kiện khi nhấn vào TV yêu thích
                         },
                       ),
                       _buildListTile(
                         icon: Icons.watch_later,
                         title: 'WatchList',
                         onTap: () {
-                          // Handle WatchList tap
+                          // Xử lý sự kiện khi nhấn vào Danh sách xem sau
                         },
                       ),
                     ],
