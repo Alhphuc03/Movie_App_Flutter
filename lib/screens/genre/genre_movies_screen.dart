@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:xemphim/api/api.dart';
 import 'package:xemphim/common/untils.dart';
+import 'package:xemphim/model/list_model.dart';
 import 'package:xemphim/model/movie_model.dart';
 import 'package:xemphim/screens/detail/detail_screen.dart';
 import 'package:xemphim/widgets/App_Bar.dart';
@@ -10,23 +11,34 @@ class GenreMoviesScreen extends StatefulWidget {
   final int genreId;
   final String genreName;
 
-  const GenreMoviesScreen({
-    Key? key,
-    required this.genreId,
-    required this.genreName,
-  }) : super(key: key);
+  const GenreMoviesScreen(
+      {Key? key, required this.genreId, required this.genreName})
+      : super(key: key);
 
   @override
   _GenreMoviesScreenState createState() => _GenreMoviesScreenState();
 }
 
 class _GenreMoviesScreenState extends State<GenreMoviesScreen> {
+  late Future<List<MovieList>> movieList;
   late Future<List<Movie>> _movies;
+  late int selectedGenreId;
+  int visibleMovieCount = 5;
+  bool showLessMovie = false;
 
   @override
   void initState() {
     super.initState();
-    _movies = Api().getMoviesByGenre(widget.genreId);
+    selectedGenreId = widget.genreId;
+    movieList = Api().getListOfMovies();
+    _movies = Api().getMoviesByGenre(selectedGenreId);
+  }
+
+  void _onGenreSelected(int genreId) {
+    setState(() {
+      selectedGenreId = genreId;
+      _movies = Api().getMoviesByGenre(selectedGenreId);
+    });
   }
 
   @override
@@ -35,19 +47,64 @@ class _GenreMoviesScreenState extends State<GenreMoviesScreen> {
       backgroundColor: kBackgoundColor,
       appBar: CustomAppBar(),
       drawer: DrawerNavi(),
-      // bottomNavigationBar: const BottomNavBar(),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Text(
-              widget.genreName,
-              style: const TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
+          // Genre tags
+          FutureBuilder<List<MovieList>>(
+            future: movieList,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text('Error: ${snapshot.error}'),
+                );
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return const Center(
+                  child: Text('No data available.'),
+                );
+              } else {
+                return Container(
+                  height: 40,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      final genre = snapshot.data![index];
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: GestureDetector(
+                          onTap: () => _onGenreSelected(genre.id),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 8,
+                              horizontal: 16,
+                            ),
+                            decoration: BoxDecoration(
+                              color: selectedGenreId == genre.id
+                                  ? Colors.red
+                                  : Colors.grey[800],
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              genre.name,
+                              style: TextStyle(
+                                color: selectedGenreId == genre.id
+                                    ? Colors.white
+                                    : Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }
+            },
           ),
           Expanded(
             child: FutureBuilder<List<Movie>>(

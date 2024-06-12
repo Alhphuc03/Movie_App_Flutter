@@ -97,7 +97,21 @@ class Api {
     }
   }
 
-  Future<List<Movie>> getTVByGenre(int genreId) async {
+  // Future<List<Movie>> getTVByGenre(int genreId) async {
+  //   final url =
+  //       "https://api.themoviedb.org/3/discover/tv?api_key=$apiKey&with_genres=$genreId";
+  //   final response = await http.get(Uri.parse(url));
+  //   if (response.statusCode == 200) {
+  //     final List<dynamic> data = json.decode(response.body)['results'];
+
+  //     List<Movie> movies = data.map((movie) => Movie.fromMap(movie)).toList();
+  //     return movies;
+  //   } else {
+  //     throw Exception('Failed to load TV shows by genre');
+  //   }
+  // }
+
+  Future<List<Movie>> getTVsByGenre(int genreId) async {
     final url =
         "https://api.themoviedb.org/3/discover/tv?api_key=$apiKey&with_genres=$genreId";
     final response = await http.get(Uri.parse(url));
