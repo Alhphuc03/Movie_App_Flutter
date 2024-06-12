@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-class GlobalManager {
+class AvtManager {
   static final ValueNotifier<String> avatarUrlNotifier = ValueNotifier<String>('');
 
   static String get avatarUrl => avatarUrlNotifier.value;

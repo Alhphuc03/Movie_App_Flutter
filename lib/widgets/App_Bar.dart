@@ -35,7 +35,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
             Row(
               children: [
                 ValueListenableBuilder<String>(
-                  valueListenable: GlobalManager.avatarUrlNotifier,
+                  valueListenable: AvtManager.avatarUrlNotifier,
                   builder: (context, avatarUrl, child) {
                     return IconButton(
                       onPressed: () {

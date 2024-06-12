@@ -42,7 +42,7 @@ class _AccountScreenState extends State<AccountScreen> {
       if (mounted) {
         setState(() {
           _accountName = username ?? '';
-          GlobalManager.avatarUrl = avatarPath != null
+          AvtManager.avatarUrl = avatarPath != null
               ? 'https://image.tmdb.org/t/p/w200$avatarPath'
               : '';
         });
@@ -83,7 +83,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
   void _logout() {
     SessionManager.clearSession();
-    GlobalManager.clearAvatarUrl();
+    AvtManager.clearAvatarUrl();
 
     Navigator.pushAndRemoveUntil(
       context,
@@ -127,8 +127,8 @@ class _AccountScreenState extends State<AccountScreen> {
                 children: [
                   CircleAvatar(
                     radius: 40.0,
-                    backgroundImage: GlobalManager.avatarUrl.isNotEmpty
-                        ? NetworkImage(GlobalManager.avatarUrl)
+                    backgroundImage: AvtManager.avatarUrl.isNotEmpty
+                        ? NetworkImage(AvtManager.avatarUrl)
                         : const AssetImage('assets/default_avatar.png')
                             as ImageProvider,
                   ),
