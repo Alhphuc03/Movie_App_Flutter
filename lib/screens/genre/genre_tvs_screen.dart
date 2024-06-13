@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:xemphim/api/api.dart';
 import 'package:xemphim/common/untils.dart';
 import 'package:xemphim/model/list_model.dart';
-import 'package:xemphim/model/movie_model.dart';
+import 'package:xemphim/model/tv_model.dart';
 import 'package:xemphim/screens/detail/detail_screen.dart';
 import 'package:xemphim/widgets/App_Bar.dart';
 import 'package:xemphim/widgets/navigation_drawer.dart';
@@ -23,7 +23,7 @@ class GenreTvsScreen extends StatefulWidget {
 
 class _GenreTvsScreenState extends State<GenreTvsScreen> {
   late Future<List<MovieList>> tvList;
-  late Future<List<Movie>> _tvShows;
+  late Future<List<TVShow>> _tvShows;
   late int selectedGenreId;
   int visibleTvCount = 5;
   bool showLessTv = false;
@@ -109,7 +109,7 @@ class _GenreTvsScreenState extends State<GenreTvsScreen> {
             },
           ),
           Expanded(
-            child: FutureBuilder<List<Movie>>(
+            child: FutureBuilder<List<TVShow>>(
               future: _tvShows,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -151,7 +151,7 @@ class _GenreTvsScreenState extends State<GenreTvsScreen> {
     );
   }
 
-  Widget _buildTVShowCard(BuildContext context, Movie tvShow) {
+  Widget _buildTVShowCard(BuildContext context, TVShow tvShow) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -173,7 +173,7 @@ class _GenreTvsScreenState extends State<GenreTvsScreen> {
               ClipRRect(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(8.0)),
                 child: Image.network(
-                  'https://image.tmdb.org/t/p/original/${tvShow.posterpath}',
+                  'https://image.tmdb.org/t/p/original/${tvShow.posterPath}',
                   fit: BoxFit.cover,
                   height: 280,
                   width: double.infinity,
@@ -185,21 +185,11 @@ class _GenreTvsScreenState extends State<GenreTvsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      tvShow.title,
+                      tvShow.name,
                       style: const TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.bold,
                         overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    const SizedBox(height: 4.0),
-                    Align(
-                      child: Text(
-                        'Release Date: ${tvShow.releasedate}',
-                        style: const TextStyle(
-                          fontSize: 14.0,
-                          color: Colors.grey,
-                        ),
                       ),
                     ),
                   ],

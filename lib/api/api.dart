@@ -1,13 +1,12 @@
 import 'package:http/http.dart' as http;
 import 'package:xemphim/api/constants.dart';
-
 import 'dart:convert';
 import 'package:xemphim/model/list_model.dart';
 import 'package:xemphim/model/movie_detail.dart';
 import 'package:xemphim/model/movie_model.dart';
-import 'package:xemphim/model/movie_provider';
 import 'package:xemphim/model/movie_review.dart';
 import 'package:xemphim/model/movie_similar.dart';
+import 'package:xemphim/model/tv_model.dart';
 
 class Api {
   final upComingApiurl =
@@ -111,15 +110,15 @@ class Api {
   //   }
   // }
 
-  Future<List<Movie>> getTVsByGenre(int genreId) async {
+  Future<List<TVShow>> getTVsByGenre(int genreId) async {
     final url =
         "https://api.themoviedb.org/3/discover/tv?api_key=$apiKey&with_genres=$genreId";
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body)['results'];
 
-      List<Movie> movies = data.map((movie) => Movie.fromMap(movie)).toList();
-      return movies;
+      List<TVShow> tvShows = data.map((tv) => TVShow.fromMap(tv)).toList();
+      return tvShows;
     } else {
       throw Exception('Failed to load TV shows by genre');
     }
