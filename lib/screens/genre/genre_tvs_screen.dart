@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:xemphim/api/api.dart';
 import 'package:xemphim/common/untils.dart';
+import 'package:xemphim/main.dart';
 import 'package:xemphim/model/list_model.dart';
 import 'package:xemphim/model/tv_model.dart';
 import 'package:xemphim/screens/detail/detail_screen.dart';
@@ -45,8 +47,10 @@ class _GenreTvsScreenState extends State<GenreTvsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var themeNotifier = Provider.of<ThemeNotifier>(context);
+    bool isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
     return Scaffold(
-      backgroundColor: kBackgoundColor,
+      backgroundColor: isDarkMode ? kBackgoundColor : Colors.white,
       appBar: CustomAppBar(),
       drawer: DrawerNavi(),
       body: Column(

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:xemphim/main.dart';
 import 'package:xemphim/widgets/App_Bar.dart';
 import 'package:xemphim/widgets/navigation_drawer.dart';
-import 'package:xemphim/screens/detail/detail_screen.dart'; // Import the detail screen
+import 'package:xemphim/screens/detail/detail_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -65,10 +67,14 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var themeNotifier = Provider.of<ThemeNotifier>(context);
+    bool isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
+
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 9, 9, 24),
-      appBar: CustomAppBar(),
-      drawer: DrawerNavi(),
+      backgroundColor:
+          isDarkMode ? Colors.black : Color.fromARGB(255, 255, 255, 255),
+      appBar: const CustomAppBar(),
+      drawer: const DrawerNavi(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -81,13 +87,21 @@ class _SearchScreenState extends State<SearchScreen> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 filled: true,
-                fillColor: Colors.white,
-                suffixIcon: const Icon(Icons.search),
-                hintStyle: const TextStyle(color: Colors.black, fontSize: 16),
+                fillColor: isDarkMode
+                    ? const Color.fromARGB(255, 255, 255, 255)
+                    : Color.fromARGB(255, 218, 218, 218),
+                suffixIcon: const Icon(
+                  Icons.search,
+                  color: Colors.black,
+                ),
+                hintStyle: TextStyle(
+                  color: isDarkMode ? Colors.black : Colors.black,
+                  fontSize: 16,
+                ),
                 contentPadding:
                     const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
               ),
-              style: const TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 20, color: Colors.black),
               onChanged: (query) {
                 _searchMovies(query);
               },
@@ -115,6 +129,8 @@ class _SearchScreenState extends State<SearchScreen> {
                             margin: const EdgeInsets.symmetric(vertical: 10),
                             child: Card(
                               elevation: 5,
+                              color:
+                                  isDarkMode ? Colors.grey[900] : Colors.white,
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Row(
@@ -155,9 +171,12 @@ class _SearchScreenState extends State<SearchScreen> {
                                           Expanded(
                                             child: Text(
                                               movie['title'],
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 20,
+                                                color: isDarkMode
+                                                    ? Colors.white
+                                                    : Colors.black,
                                               ),
                                               maxLines: 2,
                                               overflow: TextOverflow.ellipsis,
@@ -165,11 +184,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                           ),
                                           const SizedBox(height: 10),
                                           Text(
-                                            movie['release_date'] != null
-                                                ? DateFormat('dd/MM/yyyy')
-                                                    .format(DateTime.parse(
-                                                        movie['release_date']))
-                                                : 'No release date',
+                                            _formatReleaseDate(
+                                                movie['release_date']),
                                             style: const TextStyle(
                                               color: Colors.red,
                                               fontSize: 18,
@@ -186,9 +202,12 @@ class _SearchScreenState extends State<SearchScreen> {
                                                     Text(
                                                       movie['vote_average']
                                                           .toString(),
-                                                      style: const TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: 18),
+                                                      style: TextStyle(
+                                                        color: isDarkMode
+                                                            ? Colors.white
+                                                            : Colors.black,
+                                                        fontSize: 18,
+                                                      ),
                                                     ),
                                                   ],
                                                 )
@@ -209,5 +228,19 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       ),
     );
+  }
+
+  String _formatReleaseDate(String? releaseDate) {
+    if (releaseDate == null || releaseDate.isEmpty) {
+      return 'No release date';
+    }
+
+    try {
+      DateTime parsedDate = DateTime.parse(releaseDate);
+      return DateFormat('dd/MM/yyyy').format(parsedDate);
+    } catch (e) {
+      print('Error parsing release date: $e');
+      return 'Invalid date format';
+    }
   }
 }

@@ -1,6 +1,7 @@
-// popular_section.dart
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:xemphim/api/api.dart';
+import 'package:xemphim/main.dart';
 import 'package:xemphim/model/movie_model.dart';
 import 'package:xemphim/screens/detail/detail_screen.dart';
 
@@ -9,20 +10,23 @@ class PopularSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeNotifier = Provider.of<ThemeNotifier>(context);
+    bool isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
+
     final Future<List<Movie>> popularMovies = Api().getPopularMovies();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-          child: const Row(
+          padding: const EdgeInsets.fromLTRB(15.0, 0, 15.0, 10.0),
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 'Popular Movie',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: isDarkMode ? Colors.white : Colors.black,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
@@ -37,7 +41,7 @@ class PopularSection extends StatelessWidget {
             future: popularMovies,
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
-                return const Center(child: CircularProgressIndicator());
+                return Center(child: CircularProgressIndicator());
               }
               final movies = snapshot.data!;
               return ListView.builder(
@@ -59,7 +63,7 @@ class PopularSection extends StatelessWidget {
                       width: 250,
                       margin: const EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: isDarkMode ? Colors.white : Colors.grey[900],
                         borderRadius: BorderRadius.circular(15),
                       ),
                       child: Column(
@@ -86,7 +90,9 @@ class PopularSection extends StatelessWidget {
                                   child: Container(
                                     padding: const EdgeInsets.all(8.0),
                                     decoration: BoxDecoration(
-                                      color: Color.fromARGB(136, 255, 0, 0),
+                                      color: isDarkMode
+                                          ? Color.fromARGB(136, 255, 0, 0)
+                                          : Colors.red.withOpacity(0.6),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: Row(
@@ -119,9 +125,10 @@ class PopularSection extends StatelessWidget {
                             child: Center(
                               child: Text(
                                 movie.title,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 16,
-                                  color: Colors.black,
+                                  color:
+                                      isDarkMode ? Colors.black : Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
                                 overflow: TextOverflow.ellipsis,

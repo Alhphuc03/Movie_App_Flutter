@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:xemphim/screens/splash/splash_screen.dart';
+import 'package:xemphim/common/session_manager.dart'; // Import your SessionManager
 
-void main() {
-  runApp(const MainApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SessionManager.init(); // Initialize SessionManager
+
+  runApp(MainApp());
 }
 
 class MainApp extends StatelessWidget {
@@ -10,14 +15,52 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return ChangeNotifierProvider(
+      create: (_) => ThemeNotifier(),
+      child: Consumer<ThemeNotifier>(
+        builder: (context, theme, _) {
+          return MaterialApp(
+            title: 'Flutter Demo',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+              useMaterial3: true,
+              brightness: Brightness.light,
+            ),
+            darkTheme: ThemeData(
+              brightness: Brightness.dark,
+              primaryColor: Colors.black,
+              scaffoldBackgroundColor: Colors.grey[900],
+              colorScheme: ColorScheme.dark(),
+            ),
+            themeMode: theme.themeMode,
+            home: SplashScreen(),
+            onGenerateRoute: (settings) {
+              if (settings.name == '/logout') {
+                // Clear session when logging out
+                SessionManager.clearSession();
+                return MaterialPageRoute(builder: (context) => SplashScreen());
+              }
+              return null;
+            },
+          );
+        },
       ),
-      home: SplashScreen(),
     );
+  }
+}
+
+class ThemeNotifier with ChangeNotifier {
+  ThemeMode _themeMode = ThemeMode.dark; // Set default theme to dark
+
+  ThemeMode get themeMode => _themeMode;
+
+  void toggleTheme() {
+    if (_themeMode == ThemeMode.light) {
+      _themeMode = ThemeMode.dark;
+    } else {
+      _themeMode = ThemeMode.light;
+    }
+    notifyListeners();
   }
 }

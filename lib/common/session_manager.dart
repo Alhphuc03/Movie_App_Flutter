@@ -13,7 +13,14 @@ class SessionManager {
     await _preferences?.setString('sessionId', sessionId);
   }
 
+  static String get accountId => _preferences?.getString('accountId') ?? '';
+
+  static Future<void> saveAccountId(String accountId) async {
+    await _preferences?.setString('accountId', accountId);
+  }
+
   static Future<void> clearSession() async {
     await _preferences?.remove('sessionId');
+    await _preferences?.remove('accountId');
   }
 }

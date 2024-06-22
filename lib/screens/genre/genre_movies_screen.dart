@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:xemphim/api/api.dart';
 import 'package:xemphim/common/untils.dart';
+import 'package:xemphim/main.dart';
 import 'package:xemphim/model/list_model.dart';
 import 'package:xemphim/model/movie_model.dart';
 import 'package:xemphim/screens/detail/detail_screen.dart';
@@ -43,10 +45,12 @@ class _GenreMoviesScreenState extends State<GenreMoviesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var themeNotifier = Provider.of<ThemeNotifier>(context);
+    bool isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
     return Scaffold(
-      backgroundColor: kBackgoundColor,
-      appBar: CustomAppBar(),
-      drawer: DrawerNavi(),
+      backgroundColor: isDarkMode ? kBackgoundColor : Colors.white,
+      appBar: const CustomAppBar(),
+      drawer: const DrawerNavi(),
       body: Column(
         children: [
           // Genre tags
@@ -71,7 +75,8 @@ class _GenreMoviesScreenState extends State<GenreMoviesScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: snapshot.data!.length,
+                    itemCount:
+                        snapshot.data!.length > 10 ? 10 : snapshot.data!.length,
                     itemBuilder: (context, index) {
                       final genre = snapshot.data![index];
                       return Padding(

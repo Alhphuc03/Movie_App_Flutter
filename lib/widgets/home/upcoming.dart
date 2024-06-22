@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:provider/provider.dart';
 import 'package:xemphim/api/api.dart';
+import 'package:xemphim/main.dart';
 import 'package:xemphim/model/movie_model.dart';
 import 'package:xemphim/screens/detail/detail_screen.dart';
 
+// Ví dụ cho UpcomingSection
 class UpcomingSection extends StatelessWidget {
   const UpcomingSection({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var themeNotifier = Provider.of<ThemeNotifier>(context);
+    bool isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
+
     final Future<List<Movie>> upcomingMovies = Api().getUpcomingMovies();
 
     return Stack(
@@ -26,12 +32,12 @@ class UpcomingSection extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 10.0),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 10.0),
               child: Text(
                 'Upcoming',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: isDarkMode ? Colors.white : Colors.white,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
@@ -41,7 +47,7 @@ class UpcomingSection extends StatelessWidget {
               future: upcomingMovies,
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator());
+                  return Center(child: CircularProgressIndicator());
                 }
                 final movies = snapshot.data!;
                 return CarouselSlider.builder(
@@ -61,7 +67,7 @@ class UpcomingSection extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(height: 70),
+                          SizedBox(height: 70),
                           Stack(
                             children: [
                               Padding(
@@ -88,8 +94,9 @@ class UpcomingSection extends StatelessWidget {
                                       5 -
                                       5,
                                   decoration: BoxDecoration(
-                                    color:
-                                        const Color.fromARGB(137, 77, 76, 76),
+                                    color: isDarkMode
+                                        ? Color.fromARGB(137, 77, 76, 76)
+                                        : Color.fromARGB(137, 244, 244, 244),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   padding: const EdgeInsets.all(8),
@@ -99,8 +106,10 @@ class UpcomingSection extends StatelessWidget {
                                     children: [
                                       Text(
                                         movie.title,
-                                        style: const TextStyle(
-                                          color: Colors.white,
+                                        style: TextStyle(
+                                          color: isDarkMode
+                                              ? Colors.white
+                                              : Colors.black,
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -109,8 +118,10 @@ class UpcomingSection extends StatelessWidget {
                                       ),
                                       Text(
                                         '(${movie.releasedate.substring(0, 4)})',
-                                        style: const TextStyle(
-                                          color: Colors.white70,
+                                        style: TextStyle(
+                                          color: isDarkMode
+                                              ? Colors.white70
+                                              : Colors.black54,
                                           fontSize: 14,
                                         ),
                                       ),
@@ -128,7 +139,7 @@ class UpcomingSection extends StatelessWidget {
                     autoPlay: true,
                     enlargeCenterPage: true,
                     aspectRatio: 1.4,
-                    autoPlayInterval: const Duration(seconds: 3),
+                    autoPlayInterval: Duration(seconds: 3),
                   ),
                 );
               },

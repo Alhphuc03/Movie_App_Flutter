@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:xemphim/common/AvatarManager.dart';
+import 'package:xemphim/main.dart';
 
-class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({Key? key}) : super(key: key);
 
   @override
-  _CustomAppBarState createState() => _CustomAppBarState();
-
-  @override
   Size get preferredSize => const Size.fromHeight(70);
-}
-
-class _CustomAppBarState extends State<CustomAppBar> {
-  bool isDarkMode = true;
 
   @override
   Widget build(BuildContext context) {
+    var themeNotifier = Provider.of<ThemeNotifier>(context);
+    bool isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
+
+    // Determine which logo to display based on the current theme mode
+    String logoAsset =
+        isDarkMode ? 'assets/logo_dark.png' : 'assets/logo_light.png';
+
     return PreferredSize(
-      preferredSize: widget.preferredSize,
+      preferredSize: preferredSize,
       child: Padding(
         padding: const EdgeInsets.only(top: 10.0),
         child: AppBar(
@@ -25,7 +27,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
           foregroundColor: isDarkMode ? Colors.white : Colors.black,
           title: Container(
             child: Image.asset(
-              'assets/logo_movie.png',
+              logoAsset,
               height: 50,
               width: 120,
             ),
@@ -55,9 +57,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 ),
                 IconButton(
                   onPressed: () {
-                    setState(() {
-                      isDarkMode = !isDarkMode;
-                    });
+                    themeNotifier.toggleTheme();
                   },
                   icon: Icon(
                     isDarkMode ? Icons.wb_sunny : Icons.nightlight_round,

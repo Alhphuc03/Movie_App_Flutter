@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:xemphim/main.dart';
 import 'package:xemphim/model/movie_similar.dart';
 import 'package:xemphim/widgets/detail/SimilarMovieCard.dart';
-
 
 class SimilarMoviesSection extends StatelessWidget {
   final Future<MovieSimilar> movieSimilar;
@@ -10,15 +11,17 @@ class SimilarMoviesSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeNotifier = Provider.of<ThemeNotifier>(context);
+    bool isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Similar Movies',
             style: TextStyle(
-              color: Colors.white,
+              color: isDarkMode ? Colors.white : Colors.black,
               fontSize: 22,
               fontWeight: FontWeight.bold,
             ),
@@ -39,7 +42,8 @@ class SimilarMoviesSection extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: similarMovies
-                        .map((similarMovie) => SimilarMovieCard(similarMovie: similarMovie))
+                        .map((similarMovie) =>
+                            SimilarMovieCard(similarMovie: similarMovie))
                         .toList(),
                   ),
                 );

@@ -1,57 +1,199 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:xemphim/main.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:xemphim/model/movie_detail.dart';
+import 'package:xemphim/api/api.dart'; // Import lớp Api để sử dụng
 
-class MovieBackdrop extends StatelessWidget {
+class MovieBackdrop extends StatefulWidget {
   final MovieDetail movie;
 
   const MovieBackdrop({required this.movie});
 
   @override
+  _MovieBackdropState createState() => _MovieBackdropState();
+}
+
+class _MovieBackdropState extends State<MovieBackdrop> {
+  bool _isTrailerPlaying = false;
+  YoutubePlayerController? _youtubePlayerController;
+  String? directorName;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchDirectorName();
+  }
+
+  void _fetchDirectorName() async {
+    try {
+      String director = await Api().getDirectorName(widget.movie.id);
+      setState(() {
+        directorName = director;
+      });
+    } catch (e) {
+      print('Failed to fetch director name: $e');
+      setState(() {
+        directorName = 'Unknown';
+      });
+    }
+  }
+
+  void _playTrailer() async {
+    // Code xử lý phát trailer
+  }
+
+  @override
+  void dispose() {
+    _youtubePlayerController?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Image.network(
-          "https://image.tmdb.org/t/p/original/${movie.backdropPath}",
-          height: 250,
-          width: double.infinity,
-          fit: BoxFit.cover,
-        ),
-        Positioned(
-          bottom: 10,
-          left: 10,
-          right: 10,
-          child: Container(
-            width: 372,
-            decoration: BoxDecoration(
-              color: Colors.black54,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  movie.title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(
-                  '(${movie.releasedate.substring(0, 4)})',
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 18,
+    double screenWidth = MediaQuery.of(context).size.width;
+    String firstGenreName =
+        widget.movie.genres.isNotEmpty ? widget.movie.genres[0].name : '';
+    var themeNotifier = Provider.of<ThemeNotifier>(context);
+    bool isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
+    return Container(
+      width: screenWidth,
+      height: 423,
+      child: Stack(
+        children: <Widget>[
+          // Phần giao diện hiển thị trailer và backdrop của phim
+          _isTrailerPlaying
+              ? YoutubePlayer(
+                  controller: _youtubePlayerController!,
+                  showVideoProgressIndicator: true,
+                )
+              : Positioned(
+                  top: 0,
+                  left: 0,
+                  child: Container(
+                    width: screenWidth,
+                    height: 230,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(
+                          "https://image.tmdb.org/t/p/original/${widget.movie.backdropPath}",
+                        ),
+                        fit: BoxFit.fitWidth,
+                        colorFilter: ColorFilter.mode(
+                          Colors.white.withOpacity(0.4),
+                          BlendMode.modulate,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-              ],
+          // Phần hiển thị ảnh bìa phim và nút phát trailer
+          Positioned(
+            top: _isTrailerPlaying ? 240 : 140,
+            left: 15,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Container(
+                width: 150,
+                height: _isTrailerPlaying ? 170 : 250,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(
+                      "https://image.tmdb.org/t/p/w200/${widget.movie.posterPath}",
+                    ),
+                    fit: BoxFit.fitWidth,
+                  ),
+                ),
+              ),
             ),
           ),
-        ),
-      ],
+          // Phần hiển thị nút phát trailer và thông tin chi tiết phim
+          if (!_isTrailerPlaying)
+            Positioned(
+              top: 100,
+              left: 120,
+              child: GestureDetector(
+                onTap: _playTrailer,
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.play_circle_outline,
+                      color: isDarkMode ? Colors.white : Colors.black,
+                      size: 35,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      'Play Trailer',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: isDarkMode ? Colors.grey : Colors.black87,
+                        fontSize: 24,
+                        letterSpacing: 0,
+                        fontWeight: FontWeight.normal,
+                        height: 1,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          // Phần hiển thị thông tin chi tiết phim (tên, đạo diễn, ngày phát hành, thể loại)
+          Positioned(
+            top: 300,
+            left: 180,
+            child: Text(
+              'Director: \nReleased: \nGenre: ',
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: isDarkMode
+                    ? Color.fromRGBO(255, 255, 255, 0.37)
+                    : Colors.black87,
+                fontSize: 16,
+                letterSpacing: 0,
+                fontWeight: FontWeight.normal,
+                height: 1.4285714285714286,
+              ),
+            ),
+          ),
+          Positioned(
+            top: 300,
+            left: 290,
+            child: Text(
+              '${directorName ?? 'Loading...'} \n${widget.movie.releasedate.split('-')[0]}+ \n$firstGenreName',
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: isDarkMode
+                    ? Color.fromRGBO(255, 255, 255, 0.9)
+                    : Colors.black,
+                fontSize: 16,
+                letterSpacing: 0,
+                fontWeight: FontWeight.normal,
+                height: 1.4285714285714286,
+              ),
+            ),
+          ),
+          Positioned(
+            top: 240,
+            left: 180,
+            width: 220,
+            child: Text(
+              widget.movie.title,
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: isDarkMode
+                    ? Color.fromRGBO(255, 255, 255, 1)
+                    : Colors.black,
+                fontSize: 26,
+                letterSpacing: 0,
+                fontWeight: FontWeight.normal,
+                height: 1.0833333333333333,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

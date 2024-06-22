@@ -1,6 +1,7 @@
-// toprated_section.dart
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:xemphim/api/api.dart';
+import 'package:xemphim/main.dart';
 import 'package:xemphim/model/movie_model.dart';
 import 'package:xemphim/screens/detail/detail_screen.dart';
 
@@ -9,20 +10,23 @@ class TopRatedSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeNotifier = Provider.of<ThemeNotifier>(context);
+    bool isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
+
     final Future<List<Movie>> topRatedMovies = Api().getTopRatedMovies();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
+        Padding(
           padding: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 10.0),
           child: Text(
             'Top rated',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
+            style: TextStyle(
+              color: isDarkMode ? Colors.white : Colors.black,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         Container(
@@ -54,7 +58,9 @@ class TopRatedSection extends StatelessWidget {
                       width: 310,
                       margin: const EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 255, 0, 0),
+                        color: isDarkMode
+                            ? const Color.fromARGB(255, 255, 0, 0)
+                            : const Color.fromARGB(255, 255, 0, 0),
                         borderRadius: BorderRadius.circular(15),
                       ),
                       child: Column(
@@ -78,7 +84,9 @@ class TopRatedSection extends StatelessWidget {
                                   child: Container(
                                     padding: const EdgeInsets.all(8.0),
                                     decoration: BoxDecoration(
-                                      color: Colors.black54,
+                                      color: isDarkMode
+                                          ? Colors.black54
+                                          : Colors.black54.withOpacity(0.6),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: Row(
@@ -113,9 +121,11 @@ class TopRatedSection extends StatelessWidget {
                                 fit: BoxFit.scaleDown,
                                 child: Text(
                                   movie.title,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 16,
-                                    color: Colors.white,
+                                    color: isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),

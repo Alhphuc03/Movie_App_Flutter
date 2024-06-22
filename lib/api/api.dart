@@ -174,4 +174,23 @@ class Api {
       throw Exception('Failed to load movie similar');
     }
   }
+
+  Future<String> getDirectorName(int movieId) async {
+    final url =
+        "https://api.themoviedb.org/3/movie/$movieId/credits?api_key=$apiKey";
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      final List<dynamic> crew = data['crew'];
+      final director = crew.firstWhere((member) => member['job'] == 'Director',
+          orElse: () => null);
+      if (director != null) {
+        return director['name'];
+      } else {
+        throw Exception('Director not found');
+      }
+    } else {
+      throw Exception('Failed to load director');
+    }
+  }
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:xemphim/main.dart';
 import 'package:xemphim/model/movie_model.dart';
 import 'package:xemphim/screens/detail/detail_screen.dart';
 
@@ -9,6 +11,8 @@ class SimilarMovieCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeNotifier = Provider.of<ThemeNotifier>(context);
+    bool isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -20,6 +24,7 @@ class SimilarMovieCard extends StatelessWidget {
       },
       child: Container(
         width: 150,
+        height: 300,
         margin: const EdgeInsets.only(right: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,11 +39,15 @@ class SimilarMovieCard extends StatelessWidget {
               },
             ),
             const SizedBox(height: 4),
-            Text(
-              similarMovie.title,
-              style: const TextStyle(color: Colors.white),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+            Center(
+              child: Text(
+                similarMovie.title,
+                style: TextStyle(
+                    color: isDarkMode ? Colors.white : Colors.black,
+                    fontWeight: FontWeight.bold),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ],
         ),

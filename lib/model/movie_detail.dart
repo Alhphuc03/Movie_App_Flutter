@@ -13,6 +13,7 @@ class MovieDetail {
   final int budget;
   final int revenue;
   final List<Genre> genres;
+  final bool adult;
 
   MovieDetail({
     required this.title,
@@ -29,6 +30,7 @@ class MovieDetail {
     required this.budget,
     required this.revenue,
     required this.genres,
+    required this.adult,
   });
 
   factory MovieDetail.fromMap(Map<String, dynamic> map) {
@@ -50,6 +52,7 @@ class MovieDetail {
       genres: (map['genres'] as List<dynamic>)
           .map((genre) => Genre.fromMap(genre))
           .toList(),
+      adult: map['adult'] ?? false,
     );
   }
 
@@ -69,6 +72,7 @@ class MovieDetail {
       'budget': budget,
       'revenue': revenue,
       'genres': genres.map((genre) => genre.toMap()).toList(),
+      'adult': adult,
     };
   }
 }
