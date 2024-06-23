@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
 import 'package:xemphim/api/api.dart';
+import 'package:xemphim/common/languageManager.dart';
 import 'package:xemphim/main.dart';
 import 'package:xemphim/model/movie_model.dart';
 import 'package:xemphim/screens/detail/detail_screen.dart';
@@ -15,7 +16,11 @@ class UpcomingSection extends StatelessWidget {
     var themeNotifier = Provider.of<ThemeNotifier>(context);
     bool isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
 
-    final Future<List<Movie>> upcomingMovies = Api().getUpcomingMovies();
+    bool isVietnameseMode = LanguageManager.isVietnamese();
+
+    final Future<List<Movie>> upcomingMovies = Api().getUpcomingMovies(
+      isVietnameseMode ? 'vi-VN' : 'en-US',
+    );
 
     return Stack(
       children: [
@@ -35,7 +40,7 @@ class UpcomingSection extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 10.0),
               child: Text(
-                'Upcoming',
+                isVietnameseMode ? "Sắp ra mắt" : 'Upcoming',
                 style: TextStyle(
                   color: isDarkMode ? Colors.white : Colors.white,
                   fontSize: 24,

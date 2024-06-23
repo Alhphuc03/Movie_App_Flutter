@@ -20,11 +20,13 @@ class Api {
   final getTVList =
       "https://api.themoviedb.org/3/genre/tv/list?api_key=$apiKey";
 
-  Future<List<Movie>> getUpcomingMovies() async {
-    final response = await http.get(Uri.parse(upComingApiurl));
+  Future<List<Movie>> getUpcomingMovies(String languageCode) async {
+    final url =
+        "https://api.themoviedb.org/3/movie/upcoming?api_key=$apiKey&language=$languageCode";
+
+    final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body)['results'];
-
       List<Movie> movies = data.map((movie) => Movie.fromMap(movie)).toList();
       return movies;
     } else {
