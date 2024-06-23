@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:xemphim/common/languageManager.dart';
 import 'package:xemphim/screens/splash/splash_screen.dart';
 import 'package:xemphim/common/session_manager.dart'; // Import your SessionManager
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SessionManager.init(); // Initialize SessionManager
+  await SessionManager.init();
 
-  runApp(MainApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LanguageManager()),
+        ChangeNotifierProvider(create: (_) => ThemeNotifier()),
+      ],
+      child: MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {

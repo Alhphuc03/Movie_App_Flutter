@@ -15,8 +15,8 @@ class UpcomingSection extends StatelessWidget {
   Widget build(BuildContext context) {
     var themeNotifier = Provider.of<ThemeNotifier>(context);
     bool isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
-
-    bool isVietnameseMode = LanguageManager.isVietnamese();
+    var languageManager = Provider.of<LanguageManager>(context);
+    bool isVietnameseMode = languageManager.isVietnamese();
 
     final Future<List<Movie>> upcomingMovies = Api().getUpcomingMovies(
       isVietnameseMode ? 'vi-VN' : 'en-US',
@@ -42,7 +42,7 @@ class UpcomingSection extends StatelessWidget {
               child: Text(
                 isVietnameseMode ? "Sắp ra mắt" : 'Upcoming',
                 style: TextStyle(
-                  color: isDarkMode ? Colors.white : Colors.white,
+                  color: Colors.white,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
