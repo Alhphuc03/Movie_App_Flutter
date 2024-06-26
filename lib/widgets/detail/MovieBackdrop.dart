@@ -40,7 +40,50 @@ class _MovieBackdropState extends State<MovieBackdrop> {
   }
 
   void _playTrailer() async {
-    // Code xử lý phát trailer
+    try {
+      String? trailerUrl = await Api().getMovieTrailerUrl(widget.movie.id);
+      if (trailerUrl != null) {
+        final videoId = YoutubePlayer.convertUrlToId(trailerUrl);
+        if (videoId != null) {
+          _youtubePlayerController = YoutubePlayerController(
+            initialVideoId: videoId,
+            flags: const YoutubePlayerFlags(
+                autoPlay: true, showLiveFullscreenButton: false),
+          );
+          setState(() {
+            _isTrailerPlaying = true;
+          });
+        }
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Error'),
+            content: Text('No trailer available for this movie.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Error'),
+          content: Text('Failed to load trailer. Please try again later.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   @override
