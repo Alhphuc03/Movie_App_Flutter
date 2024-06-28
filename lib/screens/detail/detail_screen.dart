@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xemphim/api/api.dart';
+import 'package:xemphim/common/languageManager.dart';
 import 'package:xemphim/main.dart';
 import 'package:xemphim/model/movie_detail.dart';
 import 'package:xemphim/model/movie_review.dart';
@@ -8,7 +9,6 @@ import 'package:xemphim/model/movie_similar.dart';
 import 'package:xemphim/widgets/app_bar.dart';
 import 'package:xemphim/widgets/detail/MovieBackdrop.dart';
 import 'package:xemphim/widgets/detail/MovieDetails.dart';
-import 'package:xemphim/widgets/detail/MovieInfo.dart';
 import 'package:xemphim/widgets/detail/ReviewsSection.dart';
 import 'package:xemphim/widgets/detail/SimilarMoviesSection.dart';
 import 'package:xemphim/widgets/detail/watch_movie_button.dart'; // Import WatchMovieButton
@@ -35,9 +35,12 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    _movieDetails = Api().getMovieDetails(widget.movieId);
-    _movieReviews = Api().getMovieReviews(widget.movieId);
-    _movieSimilar = Api().getMovieSimilar(widget.movieId);
+    var languageManager = Provider.of<LanguageManager>(context, listen: false);
+    bool isVietnameseMode = languageManager.isVietnamese();
+    String languageCode = isVietnameseMode ? 'vi-VN' : 'en-US';
+    _movieDetails = Api().getMovieDetails(widget.movieId, languageCode);
+    _movieReviews = Api().getMovieReviews(widget.movieId, languageCode);
+    _movieSimilar = Api().getMovieSimilar(widget.movieId, languageCode);
   }
 
   @override
@@ -51,6 +54,9 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
     var themeNotifier = Provider.of<ThemeNotifier>(context);
     bool isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
 
+    var languageManager = Provider.of<LanguageManager>(context);
+    bool isVietnameseMode = languageManager.isVietnamese();
+
     return Scaffold(
       backgroundColor: isDarkMode ? Colors.black : Colors.white,
       appBar: CustomAppBar(),
@@ -62,7 +68,10 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData) {
-            return const Center(child: Text('No movie details found.'));
+            return Center(
+                child: Text(isVietnameseMode
+                    ? 'Không có chi tiết phim'
+                    : 'No movie details found.'));
           } else {
             final movie = snapshot.data!;
             return Stack(
@@ -87,10 +96,14 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
-                          tabs: const [
-                            Tab(text: 'Detail'),
-                            Tab(text: 'Reviews'),
-                            Tab(text: 'Similar'),
+                          tabs: [
+                            Tab(text: isVietnameseMode ? 'Chi tiết' : 'Detail'),
+                            Tab(
+                                text:
+                                    isVietnameseMode ? 'Đánh giá' : 'Reviews'),
+                            Tab(
+                                text:
+                                    isVietnameseMode ? 'Liên quan' : 'Similar'),
                           ],
                         ),
                       ),
@@ -145,6 +158,9 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
   }
 
   Widget _buildMovieReviews() {
+    var languageManager = Provider.of<LanguageManager>(context);
+    bool isVietnameseMode = languageManager.isVietnamese();
+
     return FutureBuilder<List<Reviews>>(
       future: _movieReviews,
       builder: (context, snapshot) {
@@ -153,7 +169,10 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text('No reviews available.'));
+          return Center(
+              child: Text(isVietnameseMode
+                  ? 'Không có đánh giá nào'
+                  : 'No reviews available.'));
         } else {
           return ReviewsSection(
             movieReviews: _movieReviews,
@@ -170,6 +189,9 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
   }
 
   Widget _buildSimilarMovies() {
+    var languageManager = Provider.of<LanguageManager>(context);
+    bool isVietnameseMode = languageManager.isVietnamese();
+
     return FutureBuilder<MovieSimilar>(
       future: _movieSimilar,
       builder: (context, snapshot) {
@@ -178,7 +200,10 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (!snapshot.hasData) {
-          return const Center(child: Text('No similar movies found.'));
+          return Center(
+              child: Text(isVietnameseMode
+                  ? 'Không có phim liên quan'
+                  : 'No similar movies found.'));
         } else {
           final similarMovies = snapshot.data!;
           return SimilarMoviesSection(movieSimilar: _movieSimilar);

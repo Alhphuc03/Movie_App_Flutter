@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:xemphim/common/languageManager.dart';
 import 'package:xemphim/main.dart';
 import 'package:xemphim/model/movie_similar.dart';
 import 'package:xemphim/widgets/detail/SimilarMovieCard.dart';
@@ -13,13 +14,17 @@ class SimilarMoviesSection extends StatelessWidget {
   Widget build(BuildContext context) {
     var themeNotifier = Provider.of<ThemeNotifier>(context);
     bool isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
+
+    var languageManager = Provider.of<LanguageManager>(context, listen: false);
+    bool isVietnameseMode = languageManager.isVietnamese();
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Similar Movies',
+            isVietnameseMode ? 'Phim liên quan' : 'Similar Movies',
             style: TextStyle(
               color: isDarkMode ? Colors.white : Colors.black,
               fontSize: 22,
@@ -35,7 +40,10 @@ class SimilarMoviesSection extends StatelessWidget {
               } else if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
               } else if (!snapshot.hasData) {
-                return const Center(child: Text('No similar movies found.'));
+                return Center(
+                    child: Text(isVietnameseMode
+                        ? 'Không có phim liên quan'
+                        : 'No similar movies found.'));
               } else {
                 final similarMovies = snapshot.data!.movies;
                 return SingleChildScrollView(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xemphim/api/api.dart';
+import 'package:xemphim/common/languageManager.dart';
 import 'package:xemphim/main.dart';
 import 'package:xemphim/model/movie_model.dart';
 import 'package:xemphim/screens/detail/detail_screen.dart';
@@ -12,9 +13,13 @@ class PopularSection extends StatelessWidget {
   Widget build(BuildContext context) {
     var themeNotifier = Provider.of<ThemeNotifier>(context);
     bool isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
+    
+    var languageManager = Provider.of<LanguageManager>(context);
+    bool isVietnameseMode = languageManager.isVietnamese();
 
-    final Future<List<Movie>> popularMovies = Api().getPopularMovies();
-
+    final Future<List<Movie>> popularMovies = Api().getPopularMovies(
+      isVietnameseMode ? 'vi-VN' : 'en-US',
+    );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -24,7 +29,7 @@ class PopularSection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Popular Movie',
+                isVietnameseMode ? "Phim thịnh hành" : 'Popular Movie',
                 style: TextStyle(
                   color: isDarkMode ? Colors.white : Colors.black,
                   fontSize: 24,

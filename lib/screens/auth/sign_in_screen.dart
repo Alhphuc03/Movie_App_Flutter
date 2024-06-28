@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'package:xemphim/common/languageManager.dart';
 import 'dart:convert';
 import 'package:xemphim/common/session_manager.dart';
 import 'package:xemphim/screens/account/account_screen.dart';
@@ -86,6 +88,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var languageManager = Provider.of<LanguageManager>(context);
+    bool isVietnameseMode = languageManager.isVietnamese();
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
@@ -102,8 +106,8 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
-                  'Welcome Back!',
+                Text(
+                  isVietnameseMode ? "Chào mừng quay trở lại !" :'Welcome Back!',
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
@@ -114,14 +118,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.8),
+                    color: Colors.black.withOpacity(0.8),
                     borderRadius: BorderRadius.circular(30),
                   ),
                   child: TextField(
                     controller: _usernameController,
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.person, color: Colors.black),
-                      labelText: 'Username',
+                    decoration:  InputDecoration(
+                      icon: Icon(Icons.person, color: Colors.white),
+                      labelText: isVietnameseMode ? "Tên đăng nhập" :'Username',
                       border: InputBorder.none,
                     ),
                   ),
@@ -130,14 +134,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.8),
+                    color: Colors.black.withOpacity(0.8),
                     borderRadius: BorderRadius.circular(30),
                   ),
                   child: TextField(
                     controller: _passwordController,
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.lock, color: Colors.black),
-                      labelText: 'Password',
+                    decoration:  InputDecoration(
+                      icon: Icon(Icons.lock, color: Colors.white),
+                      labelText: isVietnameseMode ? "Mật khẩu" :'Password',
                       border: InputBorder.none,
                     ),
                     obscureText: true,
@@ -154,8 +158,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
-                  child: const Text(
-                    'Login',
+                  child:  Text(
+                    isVietnameseMode ? "Đăng nhập" :'Login',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,

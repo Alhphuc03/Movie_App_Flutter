@@ -1,4 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:xemphim/common/languageManager.dart';
 import 'package:xemphim/screens/auth/registration_screen.dart';
 import 'package:xemphim/screens/auth/sign_in_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -28,6 +32,8 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var languageManager = Provider.of<LanguageManager>(context);
+    bool isVietnameseMode = languageManager.isVietnamese();
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
@@ -35,6 +41,12 @@ class _AuthScreenState extends State<AuthScreen> {
           Image.asset(
             'assets/banner.png', // Đặt tên tệp ảnh của bạn tại đây
             fit: BoxFit.cover,
+          ),
+          BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+            child: Container(
+              color: Colors.black.withOpacity(0), // Đặt opacity cho container để làm hình ảnh mờ hơn
+            ),
           ),
           Container(
             decoration: BoxDecoration(
@@ -74,14 +86,15 @@ class _AuthScreenState extends State<AuthScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 30.0),
                 child: Text(
-                  'Watch your favorite movie or Watch your favorite movie or series on only one platform. You can watch it anytime and anywhere',
+                  isVietnameseMode ? "Hãy để chúng tôi chia sẻ niềm vui, để bạn có thể nhẹ nhàng hơn bước" : 'Let us share the burden, so you can step more lightly',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22,
                   ),
                 ),
               ),
@@ -98,8 +111,8 @@ class _AuthScreenState extends State<AuthScreen> {
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
-                child: const Text(
-                  'SIGN IN',
+                child:  Text(
+                  isVietnameseMode ? "Đăng nhập" : 'SIGN IN',
                   style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -119,8 +132,8 @@ class _AuthScreenState extends State<AuthScreen> {
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
-                child: const Text(
-                  'SIGN UP',
+                child:  Text(
+                  isVietnameseMode ? "Đăng ký" :'SIGN UP',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,

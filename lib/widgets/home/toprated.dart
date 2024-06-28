@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xemphim/api/api.dart';
+import 'package:xemphim/common/languageManager.dart';
 import 'package:xemphim/main.dart';
 import 'package:xemphim/model/movie_model.dart';
 import 'package:xemphim/screens/detail/detail_screen.dart';
@@ -12,8 +13,12 @@ class TopRatedSection extends StatelessWidget {
   Widget build(BuildContext context) {
     var themeNotifier = Provider.of<ThemeNotifier>(context);
     bool isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
+    var languageManager = Provider.of<LanguageManager>(context);
+    bool isVietnameseMode = languageManager.isVietnamese();
 
-    final Future<List<Movie>> topRatedMovies = Api().getTopRatedMovies();
+    final Future<List<Movie>> topRatedMovies = Api().getTopRatedMovies(
+      isVietnameseMode ? 'vi-VN' : 'en-US',
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -21,7 +26,7 @@ class TopRatedSection extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 10.0),
           child: Text(
-            'Top rated',
+            isVietnameseMode ? "Phim được dánh giá cao" : 'Top rated',
             style: TextStyle(
               color: isDarkMode ? Colors.white : Colors.black,
               fontSize: 24,
@@ -69,7 +74,7 @@ class TopRatedSection extends StatelessWidget {
                           Stack(
                             children: [
                               ClipRRect(
-                                borderRadius: BorderRadius.circular(15),
+                                borderRadius: BorderRadius.circular(0),
                                 child: Image.network(
                                   "https://image.tmdb.org/t/p/original/${movie.backdropPath}",
                                   height: 200,

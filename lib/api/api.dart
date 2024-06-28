@@ -15,10 +15,6 @@ class Api {
       "https://api.themoviedb.org/3/movie/popular?api_key=$apiKey";
   final topRatedApiurl =
       "https://api.themoviedb.org/3/movie/top_rated?api_key=$apiKey";
-  final getMovieList =
-      "https://api.themoviedb.org/3/genre/movie/list?api_key=$apiKey";
-  final getTVList =
-      "https://api.themoviedb.org/3/genre/tv/list?api_key=$apiKey";
 
   Future<List<Movie>> getUpcomingMovies(String languageCode) async {
     final url =
@@ -34,8 +30,11 @@ class Api {
     }
   }
 
-  Future<List<Movie>> getPopularMovies() async {
-    final response = await http.get(Uri.parse(popularApiurl));
+  Future<List<Movie>> getPopularMovies(String languageCode) async {
+    final url =
+        "https://api.themoviedb.org/3/movie/popular?api_key=$apiKey&language=$languageCode";
+
+    final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body)['results'];
 
@@ -46,8 +45,10 @@ class Api {
     }
   }
 
-  Future<List<Movie>> getTopRatedMovies() async {
-    final response = await http.get(Uri.parse(topRatedApiurl));
+  Future<List<Movie>> getTopRatedMovies(String languageCode) async {
+    final url =
+        "https://api.themoviedb.org/3/movie/top_rated?api_key=$apiKey&language=$languageCode";
+    final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body)['results'];
 
@@ -58,7 +59,9 @@ class Api {
     }
   }
 
-  Future<List<MovieList>> getListOfMovies() async {
+  Future<List<MovieList>> getListOfMovies(String languageCode) async {
+    final getMovieList =
+        "https://api.themoviedb.org/3/genre/movie/list?api_key=$apiKey&language=$languageCode";
     final response = await http.get(Uri.parse(getMovieList));
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body)['genres'];
@@ -71,7 +74,10 @@ class Api {
     }
   }
 
-  Future<List<MovieList>> getListTV() async {
+  Future<List<MovieList>> getListTV(String languageCode) async {
+    final getTVList =
+        "https://api.themoviedb.org/3/genre/tv/list?api_key=$apiKey&language=$languageCode";
+
     final response = await http.get(Uri.parse(getTVList));
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body)['genres'];
@@ -80,13 +86,13 @@ class Api {
           data.map((genre) => MovieList.fromMap(genre)).toList();
       return movies;
     } else {
-      throw Exception('Failed to load movie genres');
+      throw Exception('Failed to load tv genres');
     }
   }
 
-  Future<List<Movie>> getMoviesByGenre(int genreId) async {
+  Future<List<Movie>> getMoviesByGenre(int genreId ,String languageCode) async {
     final url =
-        "https://api.themoviedb.org/3/discover/movie?api_key=$apiKey&with_genres=$genreId";
+        "https://api.themoviedb.org/3/discover/movie?api_key=$apiKey&with_genres=$genreId&language=$languageCode";
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body)['results'];
@@ -112,9 +118,9 @@ class Api {
   //   }
   // }
 
-  Future<List<TVShow>> getTVsByGenre(int genreId) async {
+  Future<List<TVShow>> getTVsByGenre(int genreId , String languageCode) async {
     final url =
-        "https://api.themoviedb.org/3/discover/tv?api_key=$apiKey&with_genres=$genreId";
+        "https://api.themoviedb.org/3/discover/tv?api_key=$apiKey&with_genres=$genreId&language=$languageCode";
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body)['results'];
@@ -126,8 +132,9 @@ class Api {
     }
   }
 
-  Future<MovieDetail> getMovieDetails(int movieId) async {
-    final url = "https://api.themoviedb.org/3/movie/$movieId?api_key=$apiKey";
+  Future<MovieDetail> getMovieDetails(int movieId, String languageCode) async {
+    final url =
+        "https://api.themoviedb.org/3/movie/$movieId?api_key=$apiKey&language=$languageCode";
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
@@ -152,9 +159,10 @@ class Api {
     return null;
   }
 
-  Future<List<Reviews>> getMovieReviews(int movieId) async {
+  Future<List<Reviews>> getMovieReviews(
+      int movieId, String languageCode) async {
     final url =
-        "https://api.themoviedb.org/3/movie/$movieId/reviews?api_key=$apiKey";
+        "https://api.themoviedb.org/3/movie/$movieId/reviews?api_key=$apiKey&language=$languageCode";
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body)['results'];
@@ -164,9 +172,9 @@ class Api {
     }
   }
 
-  Future<MovieSimilar> getMovieSimilar(int movieId) async {
+  Future<MovieSimilar> getMovieSimilar(int movieId, String languageCode) async {
     final url =
-        "https://api.themoviedb.org/3/movie/$movieId/similar?api_key=$apiKey";
+        "https://api.themoviedb.org/3/movie/$movieId/similar?api_key=$apiKey&language=$languageCode";
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);

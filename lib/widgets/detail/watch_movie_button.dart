@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:xemphim/common/languageManager.dart';
 import 'package:xemphim/screens/detail/watch_movie_screen.dart';
 
 class WatchMovieButton extends StatelessWidget {
@@ -12,6 +14,9 @@ class WatchMovieButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var languageManager = Provider.of<LanguageManager>(context, listen: false);
+    bool isVietnameseMode = languageManager.isVietnamese();
+
     return Expanded(
       child: ElevatedButton(
         onPressed: () {
@@ -33,12 +38,13 @@ class WatchMovieButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
           ),
         ),
-        child: const Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Icon(Icons.movie_creation_outlined),
             SizedBox(width: 8),
-            Text('Watch Movie', style: TextStyle(fontSize: 18)),
+            Text(isVietnameseMode ? "Xem phim" : 'Watch Movie',
+                style: TextStyle(fontSize: 18)),
           ],
         ),
       ),

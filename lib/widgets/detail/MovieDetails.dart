@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:xemphim/common/languageManager.dart';
 import 'package:xemphim/main.dart';
 import 'package:xemphim/model/movie_detail.dart';
 import 'package:xemphim/screens/detail/watch_movie_screen.dart';
@@ -14,6 +15,10 @@ class MovieDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     var themeNotifier = Provider.of<ThemeNotifier>(context);
     bool isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
+
+    var languageManager = Provider.of<LanguageManager>(context);
+    bool isVietnameseMode = languageManager.isVietnamese();
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -73,7 +78,7 @@ class MovieDetails extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          'Time',
+                          isVietnameseMode ? 'Thời lượng' : 'Time',
                           style: TextStyle(
                             color: isDarkMode ? Colors.white70 : Colors.black87,
                             fontSize: 14,
@@ -81,7 +86,9 @@ class MovieDetails extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          '${movie.runtime} Min',
+                          isVietnameseMode
+                              ? '${movie.runtime} phút'
+                              : '${movie.runtime} min',
                           style: TextStyle(
                             color: isDarkMode ? Colors.white70 : Colors.black87,
                             fontSize: 16,
@@ -109,7 +116,7 @@ class MovieDetails extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          'Age',
+                          isVietnameseMode ? 'Tuổi' : 'Age',
                           style: TextStyle(
                             color: isDarkMode ? Colors.white70 : Colors.black87,
                             fontSize: 14,
@@ -117,7 +124,9 @@ class MovieDetails extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          '${movie.adult ? '18+' : 'No'}',
+                          isVietnameseMode
+                              ? '${movie.adult ? '18+' : 'Không'}'
+                              : '${movie.adult ? '18+' : 'No'}',
                           style: TextStyle(
                             color: isDarkMode ? Colors.white70 : Colors.black87,
                             fontSize: 16,
@@ -132,7 +141,7 @@ class MovieDetails extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'Overview',
+            isVietnameseMode ? 'Mô tả' : 'Overview',
             style: TextStyle(
               color: isDarkMode ? Colors.white : Colors.black,
               fontSize: 22,
@@ -162,7 +171,7 @@ class MovieDetails extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'Genres',
+            isVietnameseMode ? 'Thể loại' : 'Genres',
             style: TextStyle(
               color: isDarkMode ? Colors.white : Colors.black,
               fontSize: 22,

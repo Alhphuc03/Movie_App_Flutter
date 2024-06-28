@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xemphim/api/api.dart';
+import 'package:xemphim/common/languageManager.dart';
 import 'package:xemphim/common/untils.dart';
 import 'package:xemphim/main.dart';
 import 'package:xemphim/model/list_model.dart';
@@ -34,14 +35,18 @@ class _GenreTvsScreenState extends State<GenreTvsScreen> {
   void initState() {
     super.initState();
     selectedGenreId = widget.genreId;
-    tvList = Api().getListTV();
-    _tvShows = Api().getTVsByGenre(selectedGenreId);
+    var languageManager = Provider.of<LanguageManager>(context, listen: false);
+    bool isVietnameseMode = languageManager.isVietnamese();
+    String languageCode = isVietnameseMode ? 'vi-VN' : 'en-US';
+    tvList = Api().getListTV(languageCode);
+    _tvShows = Api().getTVsByGenre(selectedGenreId, languageCode);
   }
 
-  void _onGenreSelected(int genreId) {
+  void _onGenreSelected(int genreId, String languageCode) {
     setState(() {
       selectedGenreId = genreId;
-      _tvShows = Api().getTVsByGenre(selectedGenreId);
+      languageCode = languageCode;
+      _tvShows = Api().getTVsByGenre(selectedGenreId, languageCode);
     });
   }
 
@@ -49,6 +54,11 @@ class _GenreTvsScreenState extends State<GenreTvsScreen> {
   Widget build(BuildContext context) {
     var themeNotifier = Provider.of<ThemeNotifier>(context);
     bool isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
+
+    var languageManager = Provider.of<LanguageManager>(context, listen: false);
+    bool isVietnameseMode = languageManager.isVietnamese();
+    String languageCode = isVietnameseMode ? 'vi-VN' : 'en-US';
+
     return Scaffold(
       backgroundColor: isDarkMode ? kBackgoundColor : Colors.white,
       appBar: CustomAppBar(),
@@ -83,7 +93,7 @@ class _GenreTvsScreenState extends State<GenreTvsScreen> {
                       return Padding(
                         padding: const EdgeInsets.only(right: 8.0),
                         child: GestureDetector(
-                          onTap: () => _onGenreSelected(genre.id),
+                          onTap: () => _onGenreSelected(genre.id, languageCode),
                           child: Container(
                             padding: const EdgeInsets.symmetric(
                               vertical: 8,

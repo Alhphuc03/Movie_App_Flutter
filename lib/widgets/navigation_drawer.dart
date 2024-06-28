@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xemphim/api/api.dart';
+import 'package:xemphim/common/languageManager.dart';
 import 'package:xemphim/model/list_model.dart';
 import 'package:xemphim/screens/genre/genre_movies_screen.dart';
 import 'package:xemphim/screens/genre/genre_tvs_screen.dart';
@@ -23,8 +24,11 @@ class _DrawerNaviState extends State<DrawerNavi> {
 
   @override
   void initState() {
-    movieList = Api().getListOfMovies();
-    tvList = Api().getListTV();
+    var languageManager = Provider.of<LanguageManager>(context, listen: false);
+    bool isVietnameseMode = languageManager.isVietnamese();
+    String languageCode = isVietnameseMode ? 'vi-VN' : 'en-US';
+    movieList = Api().getListOfMovies(languageCode);
+    tvList = Api().getListTV(languageCode);
     super.initState();
   }
 
@@ -38,6 +42,9 @@ class _DrawerNaviState extends State<DrawerNavi> {
       ThemeData theme) {
     Color titleColor = theme.textTheme.bodyLarge!.color!;
     Color iconColor = theme.iconTheme.color!;
+
+    var languageManager = Provider.of<LanguageManager>(context, listen: false);
+    bool isVietnameseMode = languageManager.isVietnamese();
 
     return ExpansionTile(
       title: Row(
@@ -121,9 +128,9 @@ class _DrawerNaviState extends State<DrawerNavi> {
                           }
                         });
                       },
-                      child: const Text(
-                        'See more',
-                        style: TextStyle(
+                      child: Text(
+                        isVietnameseMode ? 'Xem thêm' : 'See more',
+                        style: const TextStyle(
                           fontSize: 16,
                           color: Colors.blue,
                         ),
@@ -140,9 +147,9 @@ class _DrawerNaviState extends State<DrawerNavi> {
                           }
                         });
                       },
-                      child: const Text(
-                        'See less',
-                        style: TextStyle(
+                      child: Text(
+                        isVietnameseMode ? 'Thu gọn' : 'See less',
+                        style:const TextStyle(
                           fontSize: 16,
                           color: Colors.blue,
                         ),
@@ -162,7 +169,8 @@ class _DrawerNaviState extends State<DrawerNavi> {
     var themeNotifier = Provider.of<ThemeNotifier>(context);
     bool isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
     ThemeData theme = Theme.of(context);
-
+    var languageManager = Provider.of<LanguageManager>(context, listen: false);
+    bool isVietnameseMode = languageManager.isVietnamese();
     return Drawer(
       child: Container(
         color: isDarkMode ? Colors.black : Colors.white,
@@ -209,7 +217,7 @@ class _DrawerNaviState extends State<DrawerNavi> {
                 color: isDarkMode ? Colors.white : Colors.black,
               ),
               title: Text(
-                'Home',
+                isVietnameseMode ? 'Trang chủ' : 'Home',
                 style: TextStyle(
                   fontSize: 20,
                   color: isDarkMode ? Colors.white : Colors.black,
@@ -224,10 +232,10 @@ class _DrawerNaviState extends State<DrawerNavi> {
                 );
               },
             ),
-            buildExpansionTile(
-                'Movies', Icons.movie, movieList, showLessMovie, true, theme),
-            buildExpansionTile(
-                'TV', Icons.tv, tvList, showLessTV, false, theme),
+            buildExpansionTile(isVietnameseMode ? 'Phim' : 'Movies',
+                Icons.movie, movieList, showLessMovie, true, theme),
+            buildExpansionTile(isVietnameseMode ? 'Truyền hình' : 'TV',
+                Icons.tv, tvList, showLessTV, false, theme),
           ],
         ),
       ),

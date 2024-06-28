@@ -4,6 +4,7 @@ import 'package:xemphim/main.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:xemphim/model/movie_detail.dart';
 import 'package:xemphim/api/api.dart'; // Import lớp Api để sử dụng
+import 'package:xemphim/common/languageManager.dart';
 
 class MovieBackdrop extends StatefulWidget {
   final MovieDetail movie;
@@ -28,14 +29,18 @@ class _MovieBackdropState extends State<MovieBackdrop> {
   void _fetchDirectorName() async {
     try {
       String director = await Api().getDirectorName(widget.movie.id);
-      setState(() {
-        directorName = director;
-      });
+      if (mounted) {
+        setState(() {
+          directorName = director;
+        });
+      }
     } catch (e) {
       print('Failed to fetch director name: $e');
-      setState(() {
-        directorName = 'Unknown';
-      });
+      if (mounted) {
+        setState(() {
+          directorName = 'Unknown';
+        });
+      }
     }
   }
 
@@ -99,6 +104,10 @@ class _MovieBackdropState extends State<MovieBackdrop> {
         widget.movie.genres.isNotEmpty ? widget.movie.genres[0].name : '';
     var themeNotifier = Provider.of<ThemeNotifier>(context);
     bool isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
+
+    var languageManager = Provider.of<LanguageManager>(context);
+    bool isVietnameseMode = languageManager.isVietnamese();
+
     return Container(
       width: screenWidth,
       height: 423,
@@ -166,7 +175,7 @@ class _MovieBackdropState extends State<MovieBackdrop> {
                     ),
                     SizedBox(width: 8),
                     Text(
-                      'Play Trailer',
+                      isVietnameseMode ? 'Xem trailer' : 'Play Trailer',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: isDarkMode ? Colors.grey : Colors.black87,
@@ -185,7 +194,9 @@ class _MovieBackdropState extends State<MovieBackdrop> {
             top: 300,
             left: 180,
             child: Text(
-              'Director: \nReleased: \nGenre: ',
+              isVietnameseMode
+                  ? 'Đạo diễn: \nXuất bản: \nThể loại: '
+                  : 'Director: \nReleased: \nGenre: ',
               textAlign: TextAlign.left,
               style: TextStyle(
                 color: isDarkMode

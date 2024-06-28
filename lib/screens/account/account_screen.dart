@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'dart:convert';
 import 'package:xemphim/common/AvatarManager.dart';
+import 'package:xemphim/common/languageManager.dart';
 import 'package:xemphim/common/session_manager.dart';
 import 'package:xemphim/main.dart';
 import 'package:xemphim/screens/auth/auth_screen.dart';
@@ -120,7 +121,8 @@ class _AccountScreenState extends State<AccountScreen> {
     final sessionId = SessionManager.sessionId;
     var themeNotifier = Provider.of<ThemeNotifier>(context);
     bool isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
-
+    var languageManager = Provider.of<LanguageManager>(context);
+    bool isVietnameseMode = languageManager.isVietnamese();
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: CustomAppBar(),
@@ -158,7 +160,9 @@ class _AccountScreenState extends State<AccountScreen> {
                       ),
                       const SizedBox(height: 5.0),
                       Text(
-                        'Welcome back!',
+                        isVietnameseMode
+                            ? "Chào mừng quay trở lại"
+                            : 'Welcome back',
                         style: TextStyle(
                           fontSize: 16.0,
                           color: isDarkMode ? Colors.white70 : Colors.black87,
@@ -175,8 +179,11 @@ class _AccountScreenState extends State<AccountScreen> {
                     if (sessionId.isNotEmpty) ...[
                       _buildListTile(
                         icon: Icons.list,
-                        title: 'Watchlist',
-                        subtitle: 'Your watchlist',
+                        title:
+                            isVietnameseMode ? "Danh sách phim" : 'Watchlist',
+                        subtitle: isVietnameseMode
+                            ? "Danh sách phim của bạn"
+                            : 'YourWatchlist',
                         onTap: () {
                           // Handle tap event
                         },
@@ -184,8 +191,12 @@ class _AccountScreenState extends State<AccountScreen> {
                       ),
                       _buildListTile(
                         icon: Icons.favorite,
-                        title: 'Favorite TV',
-                        subtitle: 'Your favorite TV shows',
+                        title: isVietnameseMode
+                            ? "Danh sách truyền hình TV"
+                            : 'Favorite TV',
+                        subtitle: isVietnameseMode
+                            ? "Danh sách TV yêu thích của bạn"
+                            : 'Your favorite TV shows',
                         onTap: () {
                           // Handle tap event
                         },
@@ -193,22 +204,30 @@ class _AccountScreenState extends State<AccountScreen> {
                       ),
                       _buildListTile(
                         icon: Icons.favorite,
-                        title: 'Favorite Movie',
-                        subtitle: 'Your favorite movies',
+                        title: isVietnameseMode
+                            ? "Phim yêu thích"
+                            : 'Favorite Movie',
+                        subtitle: isVietnameseMode
+                            ? "Danh sách phim yêu thích của bạn"
+                            : 'Your favorite movies',
                         onTap: () {},
                         isDarkMode: isDarkMode,
                       ),
                       _buildListTile(
                         icon: Icons.star,
-                        title: 'Rating',
-                        subtitle: 'Your ratings',
+                        title: isVietnameseMode ? "Đánh giá" : 'Rating',
+                        subtitle: isVietnameseMode
+                            ? "Đánh giá phim của bạn"
+                            : 'Your ratings',
                         onTap: () {},
                         isDarkMode: isDarkMode,
                       ),
                       _buildListTile(
                         icon: Icons.logout_outlined,
-                        title: 'Logout',
-                        subtitle: 'Logout from your account',
+                        title: isVietnameseMode ? "Đăng xuất" : 'Logout',
+                        subtitle: isVietnameseMode
+                            ? "Đăng xuất khỏi tài khoản của bạn"
+                            : 'Logout from your account',
                         onTap: _logout,
                         isDarkMode: isDarkMode,
                       ),
@@ -216,8 +235,10 @@ class _AccountScreenState extends State<AccountScreen> {
                     if (sessionId.isEmpty) ...[
                       _buildListTile(
                         icon: Icons.login_outlined,
-                        title: 'Login',
-                        subtitle: 'Login to your account',
+                        title: isVietnameseMode ? "Đăng nhập" : 'Login',
+                        subtitle: isVietnameseMode
+                            ? "Đăng nhập vào tài khoản của bạn"
+                            : 'Login to your account',
                         onTap: _navigateToAuthScreen,
                         isDarkMode: isDarkMode,
                       ),

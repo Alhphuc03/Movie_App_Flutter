@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:xemphim/common/languageManager.dart';
 import 'package:xemphim/main.dart';
 import 'package:xemphim/model/movie_review.dart';
 
@@ -24,6 +25,10 @@ class _ReviewsSectionState extends State<ReviewsSection> {
   Widget build(BuildContext context) {
     var themeNotifier = Provider.of<ThemeNotifier>(context);
     bool isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
+
+    var languageManager = Provider.of<LanguageManager>(context, listen: false);
+    bool isVietnameseMode = languageManager.isVietnamese();
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -39,7 +44,13 @@ class _ReviewsSectionState extends State<ReviewsSection> {
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text('No reviews found.'));
+                  return Center(
+                    child: Text(
+                      isVietnameseMode
+                          ? 'Không có đánh giá nào.'
+                          : 'No reviews found.',
+                    ),
+                  );
                 } else {
                   final reviews = snapshot.data!;
                   final displayReviews =
@@ -132,7 +143,13 @@ class _ReviewsSectionState extends State<ReviewsSection> {
                         onPressed: widget.onSeeAllReviewsPressed,
                         child: Center(
                           child: Text(
-                            widget.seeAllReviews ? 'See Less' : 'See All',
+                            widget.seeAllReviews
+                                ? isVietnameseMode
+                                    ? 'Thu gọn'
+                                    : 'See Less'
+                                : isVietnameseMode
+                                    ? 'Xem thêm'
+                                    : 'See All',
                             style: const TextStyle(color: Colors.amber),
                           ),
                         ),
