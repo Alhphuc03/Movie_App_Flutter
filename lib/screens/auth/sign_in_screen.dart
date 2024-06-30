@@ -5,6 +5,7 @@ import 'package:xemphim/common/languageManager.dart';
 import 'dart:convert';
 import 'package:xemphim/common/session_manager.dart';
 import 'package:xemphim/screens/account/account_screen.dart';
+import 'package:xemphim/widgets/bottom_nav_bar.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -48,9 +49,11 @@ class _LoginScreenState extends State<LoginScreen> {
             final sessionData = jsonDecode(createSessionResponse.body);
             final String sessionId = sessionData['session_id'];
             await SessionManager.saveSessionId(sessionId);
-            Navigator.pushReplacement(
+            Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => const AccountScreen()),
+              MaterialPageRoute(
+                  builder: (context) => const BottomNavBar(initialIndex: 3)),
+              (Route<dynamic> route) => false,
             );
           } else {
             _showErrorDialog('Failed to create session.');
@@ -107,8 +110,10 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  isVietnameseMode ? "Chào mừng quay trở lại !" :'Welcome Back!',
-                  style: TextStyle(
+                  isVietnameseMode
+                      ? "Chào mừng quay trở lại !"
+                      : 'Welcome Back!',
+                  style: const TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -123,9 +128,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   child: TextField(
                     controller: _usernameController,
-                    decoration:  InputDecoration(
+                    decoration: InputDecoration(
                       icon: Icon(Icons.person, color: Colors.white),
-                      labelText: isVietnameseMode ? "Tên đăng nhập" :'Username',
+                      labelText:
+                          isVietnameseMode ? "Tên đăng nhập" : 'Username',
                       border: InputBorder.none,
                     ),
                   ),
@@ -139,9 +145,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   child: TextField(
                     controller: _passwordController,
-                    decoration:  InputDecoration(
-                      icon: Icon(Icons.lock, color: Colors.white),
-                      labelText: isVietnameseMode ? "Mật khẩu" :'Password',
+                    decoration: InputDecoration(
+                      icon: const Icon(Icons.lock, color: Colors.white),
+                      labelText: isVietnameseMode ? "Mật khẩu" : 'Password',
                       border: InputBorder.none,
                     ),
                     obscureText: true,
@@ -158,9 +164,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
-                  child:  Text(
-                    isVietnameseMode ? "Đăng nhập" :'Login',
-                    style: TextStyle(
+                  child: Text(
+                    isVietnameseMode ? "Đăng nhập" : 'Login',
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),

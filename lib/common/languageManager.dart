@@ -11,6 +11,10 @@ class LanguageManager with ChangeNotifier {
   }
 
   bool isVietnamese() {
-    return!isEnglishDefault;
+    return !isEnglishDefault;
+  }
+
+  String getLanguageCode() {
+    return _isEnglishDefault ? 'en' : 'vi';
   }
 }

@@ -7,6 +7,7 @@ import 'package:xemphim/screens/genre/genre_movies_screen.dart';
 import 'package:xemphim/screens/genre/genre_tvs_screen.dart';
 import 'package:xemphim/screens/home/home_screen.dart';
 import 'package:xemphim/main.dart';
+import 'package:xemphim/widgets/bottom_nav_bar.dart';
 
 class DrawerNavi extends StatefulWidget {
   const DrawerNavi({Key? key}) : super(key: key);
@@ -149,7 +150,7 @@ class _DrawerNaviState extends State<DrawerNavi> {
                       },
                       child: Text(
                         isVietnameseMode ? 'Thu gọn' : 'See less',
-                        style:const TextStyle(
+                        style: const TextStyle(
                           fontSize: 16,
                           color: Colors.blue,
                         ),
@@ -191,7 +192,7 @@ class _DrawerNaviState extends State<DrawerNavi> {
                   accountEmail: null,
                   currentAccountPicture: null,
                   currentAccountPictureSize: const Size.square(30),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage('assets/banner-carousel.png'),
                       fit: BoxFit.cover,
@@ -227,7 +228,7 @@ class _DrawerNaviState extends State<DrawerNavi> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Home(),
+                    builder: (context) => const BottomNavBar(initialIndex: 0),
                   ),
                 );
               },

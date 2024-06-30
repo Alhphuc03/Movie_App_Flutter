@@ -27,7 +27,6 @@ class _HomeState extends State<Home> {
           isDarkMode ? Colors.black : Color.fromARGB(255, 255, 255, 255),
       appBar: const CustomAppBar(),
       drawer: const DrawerNavi(),
-      // bottomNavigationBar: BottomNavBar(),
       body: const SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

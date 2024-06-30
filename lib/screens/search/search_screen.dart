@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:xemphim/common/languageManager.dart';
 import 'package:xemphim/main.dart';
 import 'package:xemphim/widgets/App_Bar.dart';
 import 'package:xemphim/widgets/navigation_drawer.dart';
@@ -20,7 +21,7 @@ class _SearchScreenState extends State<SearchScreen> {
   List _results = [];
   bool _isLoading = false;
 
-  Future<void> _searchMovies(String query) async {
+  Future<void> _searchMovies(String query, String languageCode) async {
     if (query.isEmpty) {
       setState(() {
         _results = [];
@@ -33,7 +34,7 @@ class _SearchScreenState extends State<SearchScreen> {
     final apiKey = "5744c461b4e9a5730311b1bacdc9a337";
 
     final url =
-        'https://api.themoviedb.org/3/search/movie?api_key=$apiKey&query=$query';
+        'https://api.themoviedb.org/3/search/movie?api_key=$apiKey&query=$query&language=$languageCode';
 
     final response = await http.get(Uri.parse(url));
 
@@ -55,7 +56,9 @@ class _SearchScreenState extends State<SearchScreen> {
   void initState() {
     super.initState();
     _controller.addListener(() {
-      _searchMovies(_controller.text);
+      final languageCode = Provider.of<LanguageManager>(context, listen: false)
+          .getLanguageCode();
+      _searchMovies(_controller.text, languageCode);
     });
   }
 
@@ -69,7 +72,8 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     var themeNotifier = Provider.of<ThemeNotifier>(context);
     bool isDarkMode = themeNotifier.themeMode == ThemeMode.dark;
-
+    var languageManager = Provider.of<LanguageManager>(context);
+    bool isVietnameseMode = languageManager.isVietnamese();
     return Scaffold(
       backgroundColor:
           isDarkMode ? Colors.black : Color.fromARGB(255, 255, 255, 255),
@@ -103,7 +107,10 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
               style: const TextStyle(fontSize: 20, color: Colors.black),
               onChanged: (query) {
-                _searchMovies(query);
+                final languageCode =
+                    Provider.of<LanguageManager>(context, listen: false)
+                        .getLanguageCode();
+                _searchMovies(query, languageCode);
               },
             ),
             const SizedBox(height: 16),

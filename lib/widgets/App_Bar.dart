@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xemphim/common/AvatarManager.dart';
 import 'package:xemphim/main.dart';
+import 'package:xemphim/screens/account/account_screen.dart';
+// Ensure to import AccountScreen
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({Key? key}) : super(key: key);
@@ -41,7 +43,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   builder: (context, avatarUrl, child) {
                     return IconButton(
                       onPressed: () {
-                        // Add functionality for user icon here
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AccountScreen()),
+                        );
                       },
                       icon: avatarUrl.isNotEmpty
                           ? CircleAvatar(

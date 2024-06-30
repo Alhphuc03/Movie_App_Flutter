@@ -29,7 +29,7 @@ class MainApp extends StatelessWidget {
       child: Consumer<ThemeNotifier>(
         builder: (context, theme, _) {
           return MaterialApp(
-            title: 'Flutter Demo',
+            title: 'Movie App',
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

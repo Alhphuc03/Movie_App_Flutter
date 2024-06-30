@@ -45,17 +45,19 @@ class _WatchMovieScreenState extends State<WatchMovieScreen> {
       videoPlayerController: _videoPlayerController!,
       autoPlay: true,
       looping: true,
-      allowFullScreen: true, // Allow full screen
-      aspectRatio: 16 / 9, // Aspect ratio
-      showControlsOnInitialize: false, // Hide controls initially
-      showControls: true, // Show controls on touch
+      allowFullScreen: true,
+      autoInitialize: true, // Automatically initialize the video
+      aspectRatio: 16 / 9,
+      showControlsOnInitialize: false,
+      showControls: true,
       materialProgressColors: ChewieProgressColors(
-        playedColor: Colors.red, // Played part color
-        handleColor: Colors.blue, // Handle color
-        bufferedColor: Colors.grey, // Buffered part color
-        backgroundColor: Colors.black, // Background color
+        playedColor: Colors.red,
+        handleColor: Colors.blue,
+        bufferedColor: Colors.grey,
+        backgroundColor: Colors.black,
       ),
     );
+    _chewieController!.enterFullScreen(); // Enter full screen
   }
 
   void showError(dynamic error) {
@@ -74,12 +76,16 @@ class _WatchMovieScreenState extends State<WatchMovieScreen> {
       appBar: AppBar(
         title: Text(widget.movieTitle),
       ),
+      backgroundColor: Colors.black,
       body: FutureBuilder<Map<String, dynamic>>(
         future: _movieFuture,
         builder: (BuildContext context,
             AsyncSnapshot<Map<String, dynamic>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(
+              child: Image.asset(
+                  'assets/loading.gif'), // Thay thế bằng hình ảnh GIF
+            );
           } else if (snapshot.hasData) {
             final movieData = snapshot.data ?? {};
             final episodes = movieData['episodes'] as List<dynamic>? ?? [];

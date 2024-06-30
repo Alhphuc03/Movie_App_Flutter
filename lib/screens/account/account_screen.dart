@@ -8,6 +8,7 @@ import 'package:xemphim/common/session_manager.dart';
 import 'package:xemphim/main.dart';
 import 'package:xemphim/screens/auth/auth_screen.dart';
 import 'package:xemphim/widgets/App_Bar.dart';
+import 'package:xemphim/widgets/bottom_nav_bar.dart';
 
 const kBackgroundColor = Color.fromARGB(255, 0, 0, 0);
 const kPrimaryColorRed = Color(0xFFEA4335);
@@ -99,7 +100,9 @@ class _AccountScreenState extends State<AccountScreen> {
 
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => const AccountScreen()),
+      MaterialPageRoute(
+        builder: (context) => const BottomNavBar(initialIndex: 3),
+      ),
       (Route<dynamic> route) => false,
     );
   }

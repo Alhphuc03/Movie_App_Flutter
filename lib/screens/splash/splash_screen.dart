@@ -27,7 +27,11 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Lottie.asset('assets/netflix.json'),
+        child: Image.asset(
+          "assets/splash.gif",
+          height: 125.0,
+          width: 125.0,
+        ),
       ),
     );
   }
