@@ -86,7 +86,9 @@ class _SearchScreenState extends State<SearchScreen> {
             TextField(
               controller: _controller,
               decoration: InputDecoration(
-                hintText: 'Nhập tên phim ....',
+                hintText: isVietnameseMode
+                    ? 'Nhập tên phim ....'
+                    : "Enter the name....",
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),

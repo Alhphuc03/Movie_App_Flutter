@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:xemphim/common/AvatarManager.dart';
 import 'package:xemphim/main.dart';
 import 'package:xemphim/screens/account/account_screen.dart';
+import 'package:xemphim/widgets/bottom_nav_bar.dart';
 // Ensure to import AccountScreen
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -46,7 +47,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => AccountScreen()),
+                            builder: (context) =>
+                                const BottomNavBar(initialIndex: 3),
+                          ),
                         );
                       },
                       icon: avatarUrl.isNotEmpty

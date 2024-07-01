@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:xemphim/api/api.dart';
 import 'package:xemphim/common/languageManager.dart';
+import 'package:xemphim/common/session_manager.dart';
 import 'package:xemphim/main.dart';
 import 'package:xemphim/model/movie_detail.dart';
 import 'package:xemphim/screens/detail/watch_movie_screen.dart';
@@ -8,8 +10,9 @@ import 'package:xemphim/widgets/detail/GenreTag.dart';
 
 class MovieDetails extends StatelessWidget {
   final MovieDetail movie;
+  final int movieId;
 
-  const MovieDetails({required this.movie});
+  const MovieDetails({required this.movie, required this.movieId});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +27,102 @@ class MovieDetails extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 16),
+          // Row(
+          //   children: [
+          //     Expanded(
+          //       child: GestureDetector(
+          //         onTap: () async {
+          //           try {
+          //             final accountId = SessionManager.accountId;
+          //             final sessionId = SessionManager.sessionId;
+          //             await Api().addToWatchlist(
+          //                 int.parse(accountId), sessionId, movieId, true);
+          //             ScaffoldMessenger.of(context).showSnackBar(
+          //               const SnackBar(
+          //                 content: Text('Marked as favorite successfully'),
+          //               ),
+          //             );
+          //           } catch (error) {
+          //             ScaffoldMessenger.of(context).showSnackBar(
+          //               SnackBar(
+          //                 content: Text('Failed to mark as favorite: $error'),
+          //               ),
+          //             );
+          //           }
+          //         },
+          //         child: Container(
+          //           width: 40,
+          //           height: 40,
+          //           decoration: BoxDecoration(
+          //             shape: BoxShape.circle,
+          //             color: Colors.grey,
+          //           ),
+          //           child: Icon(
+          //             Icons.add,
+          //             color: Colors.white,
+          //           ),
+          //         ),
+          //       ),
+          //     ),
+          //     const SizedBox(width: 8),
+          //     Expanded(
+          //       child: GestureDetector(
+          //         onTap: () async {
+          //           try {
+          //             final accountId = SessionManager.accountId;
+          //             final sessionId = SessionManager.sessionId;
+          //             await Api().markAsFavorite(
+          //                 int.parse(accountId), sessionId, movieId, true);
+          //             ScaffoldMessenger.of(context).showSnackBar(
+          //               SnackBar(
+          //                 content: Text('Marked as favorite successfully'),
+          //               ),
+          //             );
+          //           } catch (error) {
+          //             ScaffoldMessenger.of(context).showSnackBar(
+          //               SnackBar(
+          //                 content: Text('Failed to mark as favorite: $error'),
+          //               ),
+          //             );
+          //           }
+          //         },
+          //         child: Container(
+          //           width: 40,
+          //           height: 40,
+          //           decoration: BoxDecoration(
+          //             shape: BoxShape.circle,
+          //             color: Colors.pink,
+          //           ),
+          //           child: Icon(
+          //             Icons.favorite,
+          //             color: Colors.white,
+          //           ),
+          //         ),
+          //       ),
+          //     ),
+          //     const SizedBox(width: 8),
+          //     Expanded(
+          //       child: GestureDetector(
+          //         onTap: () {
+          //           // Rate movie logic here
+          //         },
+          //         child: Container(
+          //           width: 40,
+          //           height: 40,
+          //           decoration: BoxDecoration(
+          //             shape: BoxShape.circle,
+          //             color: Colors.orange,
+          //           ),
+          //           child: Icon(
+          //             Icons.star,
+          //             color: Colors.white,
+          //           ),
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          // ),
+          // const SizedBox(height: 16),
           Row(
             children: [
               SizedBox(

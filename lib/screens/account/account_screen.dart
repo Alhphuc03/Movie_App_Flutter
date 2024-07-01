@@ -7,6 +7,8 @@ import 'package:xemphim/common/languageManager.dart';
 import 'package:xemphim/common/session_manager.dart';
 import 'package:xemphim/main.dart';
 import 'package:xemphim/screens/auth/auth_screen.dart';
+import 'package:xemphim/screens/mylistmovie/favorite.dart';
+import 'package:xemphim/screens/mylistmovie/watchlist.dart';
 import 'package:xemphim/widgets/App_Bar.dart';
 import 'package:xemphim/widgets/bottom_nav_bar.dart';
 
@@ -91,6 +93,20 @@ class _AccountScreenState extends State<AccountScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => AuthScreen()),
+    );
+  }
+
+  void _navigateToFavoriteScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => FavoriteScreen()),
+    );
+  }
+
+  void _navigateToWatchListScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => WatchlistScreen()),
     );
   }
 
@@ -187,9 +203,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         subtitle: isVietnameseMode
                             ? "Danh sách phim của bạn"
                             : 'YourWatchlist',
-                        onTap: () {
-                          // Handle tap event
-                        },
+                        onTap: _navigateToWatchListScreen,
                         isDarkMode: isDarkMode, // Pass isDarkMode here
                       ),
                       _buildListTile(
@@ -200,9 +214,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         subtitle: isVietnameseMode
                             ? "Danh sách TV yêu thích của bạn"
                             : 'Your favorite TV shows',
-                        onTap: () {
-                          // Handle tap event
-                        },
+                        onTap: () {},
                         isDarkMode: isDarkMode,
                       ),
                       _buildListTile(
@@ -213,7 +225,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         subtitle: isVietnameseMode
                             ? "Danh sách phim yêu thích của bạn"
                             : 'Your favorite movies',
-                        onTap: () {},
+                        onTap: _navigateToFavoriteScreen,
                         isDarkMode: isDarkMode,
                       ),
                       _buildListTile(

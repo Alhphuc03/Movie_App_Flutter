@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 import 'package:xemphim/services/movie_service.dart';
+import 'package:flutter/services.dart'; // Import the services package
 
 class WatchMovieScreen extends StatefulWidget {
   final int movieId;
@@ -28,6 +29,15 @@ class _WatchMovieScreenState extends State<WatchMovieScreen> {
   void initState() {
     super.initState();
     _movieFuture = searchMovie(widget.movieTitle, _disposed, showError);
+
+    // Set preferred orientations to landscape
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+
+    // Set full screen mode
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   }
 
   @override
@@ -35,6 +45,16 @@ class _WatchMovieScreenState extends State<WatchMovieScreen> {
     _disposed = true;
     _videoPlayerController?.dispose();
     _chewieController?.dispose();
+
+    // Reset preferred orientations and system UI mode
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
     super.dispose();
   }
 
@@ -46,7 +66,7 @@ class _WatchMovieScreenState extends State<WatchMovieScreen> {
       autoPlay: true,
       looping: true,
       allowFullScreen: true,
-      autoInitialize: true, // Automatically initialize the video
+      autoInitialize: true,
       aspectRatio: 16 / 9,
       showControlsOnInitialize: false,
       showControls: true,
@@ -57,7 +77,7 @@ class _WatchMovieScreenState extends State<WatchMovieScreen> {
         backgroundColor: Colors.black,
       ),
     );
-    _chewieController!.enterFullScreen(); // Enter full screen
+    _chewieController!.enterFullScreen();
   }
 
   void showError(dynamic error) {
@@ -73,9 +93,6 @@ class _WatchMovieScreenState extends State<WatchMovieScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.movieTitle),
-      ),
       backgroundColor: Colors.black,
       body: FutureBuilder<Map<String, dynamic>>(
         future: _movieFuture,
@@ -83,8 +100,7 @@ class _WatchMovieScreenState extends State<WatchMovieScreen> {
             AsyncSnapshot<Map<String, dynamic>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
-              child: Image.asset(
-                  'assets/loading.gif'), // Thay thế bằng hình ảnh GIF
+              child: Image.asset('assets/loading.gif'),
             );
           } else if (snapshot.hasData) {
             final movieData = snapshot.data ?? {};

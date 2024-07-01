@@ -64,7 +64,9 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
         future: _movieDetails,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(
+              child: Image.asset('assets/loading.gif'),
+            );
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData) {
@@ -149,7 +151,10 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen>
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: MovieDetails(movie: movie),
+              child: MovieDetails(
+                movie: movie,
+                movieId: widget.movieId,
+              ),
             ),
           ],
         ),

@@ -189,4 +189,75 @@ class Api {
       throw Exception('Failed to load director');
     }
   }
+
+  Future<void> _getAccountDetails(String sessionId) async {
+    final response = await http.get(
+      Uri.parse(
+          'https://api.themoviedb.org/3/account?api_key=$apiKey&session_id=$sessionId'),
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final int accountId = data['id'];
+      print('Account ID: $accountId');
+      // Bạn có thể lưu hoặc sử dụng accountId ở đây
+    } else {
+      throw Exception('Failed to load movie similar');
+    }
+  }
+
+  Future<int> getAccountId(String sessionId) async {
+    final url =
+        "https://api.themoviedb.org/3/account?api_key=$apiKey&session_id=$sessionId";
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      final int accountId = data['id'];
+      return accountId;
+    } else {
+      throw Exception('Failed to load account ID');
+    }
+  }
+
+  Future<void> markAsFavorite(
+      int accountId, String sessionId, int movieId, bool favorite) async {
+    final url =
+        'https://api.themoviedb.org/3/account/$accountId/favorite?api_key=$apiKey&session_id=$sessionId';
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json;charset=utf-8'},
+      body: jsonEncode({
+        'media_type': 'movie',
+        'media_id': movieId,
+        'favorite': favorite,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      throw Exception('Failed to mark as favorite: ${response.statusCode}');
+    } else {
+      print('Marked as favorite successfully');
+    }
+  }
+
+  Future<void> addToWatchlist(
+      int accountId, String sessionId, int movieId, bool watchlist) async {
+    final url =
+        'https://api.themoviedb.org/3/account/$accountId/watchlist?api_key=$apiKey&session_id=$sessionId';
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json;charset=utf-8'},
+      body: jsonEncode({
+        'media_type': 'movie',
+        'media_id': movieId,
+        'watchlist': watchlist,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      throw Exception('Failed to mark as favorite: ${response.statusCode}');
+    } else {
+      print('Marked as favorite successfully');
+    }
+  }
 }
