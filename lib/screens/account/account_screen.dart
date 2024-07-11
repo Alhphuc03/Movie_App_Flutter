@@ -7,6 +7,7 @@ import 'package:xemphim/common/languageManager.dart';
 import 'package:xemphim/common/session_manager.dart';
 import 'package:xemphim/main.dart';
 import 'package:xemphim/screens/auth/auth_screen.dart';
+import 'package:xemphim/screens/history/WatchHistoryScreen.dart';
 import 'package:xemphim/screens/mylistmovie/favorite.dart';
 import 'package:xemphim/screens/mylistmovie/watchlist.dart';
 import 'package:xemphim/widgets/App_Bar.dart';
@@ -107,6 +108,13 @@ class _AccountScreenState extends State<AccountScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => WatchlistScreen()),
+    );
+  }
+
+  void _navigateToHistoryScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => WatchHistoryScreen()),
     );
   }
 
@@ -235,6 +243,15 @@ class _AccountScreenState extends State<AccountScreen> {
                             ? "Đánh giá phim của bạn"
                             : 'Your ratings',
                         onTap: () {},
+                        isDarkMode: isDarkMode,
+                      ),
+                      _buildListTile(
+                        icon: Icons.history,
+                        title: isVietnameseMode ? "Lịch sử" : 'History',
+                        subtitle: isVietnameseMode
+                            ? "Lịch sử xem phim của bạn"
+                            : 'Your movie viewing history',
+                        onTap: _navigateToHistoryScreen,
                         isDarkMode: isDarkMode,
                       ),
                       _buildListTile(

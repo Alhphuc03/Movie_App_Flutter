@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xemphim/common/languageManager.dart';
+import 'package:xemphim/common/session_manager.dart';
 import 'package:xemphim/screens/detail/watch_movie_screen.dart';
 
 class WatchMovieButton extends StatelessWidget {
@@ -19,7 +20,8 @@ class WatchMovieButton extends StatelessWidget {
 
     return Expanded(
       child: ElevatedButton(
-        onPressed: () {
+        onPressed: () async {
+          await SessionManager.addToWatchHistory(movieId);
           Navigator.push(
             context,
             MaterialPageRoute(

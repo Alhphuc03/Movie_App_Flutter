@@ -251,99 +251,95 @@ class _MovieBackdropState extends State<MovieBackdrop> {
 
           Positioned(
             bottom: 0,
-            left: 0,
-            right: 0,
+            left: 30,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () async {
-                      try {
-                        final accountId = SessionManager.accountId;
-                        final sessionId = SessionManager.sessionId;
-                        await Api().addToWatchlist(int.parse(accountId),
-                            sessionId, widget.movie.id, true);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Marked as favorite successfully'),
-                          ),
-                        );
-                      } catch (error) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Failed to mark as favorite: $error'),
-                          ),
-                        );
-                      }
-                    },
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.grey,
-                      ),
-                      child: Icon(
-                        Icons.add,
-                        color: Colors.white,
-                      ),
+                GestureDetector(
+                  onTap: () async {
+                    try {
+                      final accountId = SessionManager.accountId;
+                      final sessionId = SessionManager.sessionId;
+                      await Api().addToWatchlist(int.parse(accountId),
+                          sessionId, widget.movie.id, true);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Added to watchlist successfully'),
+                        ),
+                      );
+                    } catch (error) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Failed to add to watchlist: $error'),
+                        ),
+                      );
+                    }
+                  },
+                  child: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.grey,
+                    ),
+                    child: const Icon(
+                      Icons.add,
+                      color: Colors.white,
+                      size: 20,
                     ),
                   ),
                 ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () async {
-                      try {
-                        final accountId = SessionManager.accountId;
-                        final sessionId = SessionManager.sessionId;
-                        await Api().markAsFavorite(int.parse(accountId),
-                            sessionId, widget.movie.id, true);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Marked as favorite successfully'),
-                          ),
-                        );
-                      } catch (error) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Failed to mark as favorite: $error'),
-                          ),
-                        );
-                      }
-                    },
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.pink,
-                      ),
-                      child: Icon(
-                        Icons.favorite,
-                        color: Colors.white,
-                      ),
+                const SizedBox(width: 10),
+                GestureDetector(
+                  onTap: () async {
+                    try {
+                      final accountId = SessionManager.accountId;
+                      final sessionId = SessionManager.sessionId;
+                      await Api().markAsFavorite(int.parse(accountId),
+                          sessionId, widget.movie.id, true);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Marked as favorite successfully'),
+                        ),
+                      );
+                    } catch (error) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Failed to mark as favorite: $error'),
+                        ),
+                      );
+                    }
+                  },
+                  child: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.pink,
+                    ),
+                    child: const Icon(
+                      Icons.favorite,
+                      color: Colors.white,
+                      size: 20,
                     ),
                   ),
                 ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      // Rate movie logic here
-                    },
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.orange,
-                      ),
-                      child: Icon(
-                        Icons.star,
-                        color: Colors.white,
-                      ),
+                const SizedBox(width: 10),
+                GestureDetector(
+                  onTap: () {
+                    // Rate movie logic here
+                  },
+                  child: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.orange,
+                    ),
+                    child: const Icon(
+                      Icons.star,
+                      color: Colors.white,
+                      size: 20,
                     ),
                   ),
                 ),
