@@ -1,5 +1,5 @@
 name: xemphim
-description: "A new Flutter project."
+description: "A new Flutter project."g
 publish_to: "none"
 version: 0.1.0
 
@@ -8,7 +8,7 @@ environment:
 
 dependencies:
   better_player: ^0.0.83
-  carousel_slider: ^4.2.1
+  carousel_slider: ^
   flutter:
     sdk: flutter
   google_fonts: ^6.2.1
@@ -17,7 +17,7 @@ dependencies:
   lottie: ^3.1.2
   shared_preferences: ^2.2.3
   url_launcher: ^6.2.6
-  youtube_player_flutter: ^9.0.1
+  youtube_player_fl
   youtube_video_player: ^0.1.1
   chewie: ^1.5.0
   video_player: ^2.4.0
